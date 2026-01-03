@@ -71,6 +71,8 @@ export async function signup(previousState: any, formData: FormData) {
   const password = formData.get('password') as string
   const fullName = formData.get('fullName') as string
 
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3004'
+
   const { error } = await supabase.auth.signUp({
     email,
     password,
@@ -78,6 +80,7 @@ export async function signup(previousState: any, formData: FormData) {
       data: {
         full_name: fullName,
       },
+      emailRedirectTo: `${siteUrl}/auth/callback?next=/onboarding`,
     },
   })
 
@@ -85,8 +88,8 @@ export async function signup(previousState: any, formData: FormData) {
     return { error: error.message }
   }
 
-  revalidatePath('/', 'layout')
-  redirect('/')
+  // Redirect to verify email page instead of auto-login
+  redirect(`/verify-email?email=${encodeURIComponent(email)}`)
 }
 
 export async function updateStudyField(studyField: string) {
@@ -132,6 +135,46 @@ export async function updateStudyField(studyField: string) {
 
   revalidatePath('/', 'layout')
   redirect('/')
+}
+
+export async function resendVerificationEmail(email: string) {
+  const cookieStore = await cookies()
+  
+  const supabase = createServerClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    {
+      cookies: {
+        getAll() {
+          return cookieStore.getAll()
+        },
+        setAll(cookiesToSet) {
+          try {
+            cookiesToSet.forEach(({ name, value, options }) =>
+              cookieStore.set(name, value, options)
+            )
+          } catch {
+          }
+        },
+      },
+    }
+  )
+
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3004'
+
+  const { error } = await supabase.auth.resend({
+    type: 'signup',
+    email,
+    options: {
+      emailRedirectTo: `${siteUrl}/auth/callback?next=/onboarding`,
+    },
+  })
+
+  if (error) {
+    return { error: error.message }
+  }
+
+  return { success: true }
 }
 
 export async function saveExam(previousState: any, formData: FormData) {

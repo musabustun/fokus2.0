@@ -1,0 +1,86 @@
+"use client"
+
+import Link from "next/link"
+import { usePathname } from "next/navigation"
+import { cn } from "@/lib/utils"
+import { 
+  Home, 
+  BookOpen, 
+  ClipboardList, 
+  Target, 
+  Clock,
+  BarChart3,
+  Settings,
+  LogOut
+} from "lucide-react"
+import { Button } from "@/components/ui/button"
+import { createClient } from "@/lib/supabase/client"
+import { useRouter } from "next/navigation"
+
+const navItems = [
+  { href: "/", label: "Dashboard", icon: Home },
+  { href: "/study", label: "Study Log", icon: Clock },
+  { href: "/exams", label: "Exams", icon: ClipboardList },
+  { href: "/books", label: "Library", icon: BookOpen },
+  { href: "/goals", label: "Goals", icon: Target },
+]
+
+export function Sidebar() {
+  const pathname = usePathname()
+  const router = useRouter()
+
+  const handleLogout = async () => {
+    const supabase = createClient()
+    await supabase.auth.signOut()
+    router.push('/login')
+  }
+
+  return (
+    <aside className="fixed left-0 top-0 z-40 h-screen w-64 border-r bg-card/50 backdrop-blur-sm hidden lg:block">
+      <div className="flex h-full flex-col px-4 py-6">
+        {/* Logo */}
+        <div className="mb-8 px-2">
+          <Link href="/" className="flex items-center gap-2">
+            <div className="h-8 w-8 rounded-lg bg-gradient-to-br from-primary to-primary/60 flex items-center justify-center">
+              <BarChart3 className="h-5 w-5 text-primary-foreground" />
+            </div>
+            <span className="text-xl font-bold tracking-tight">YKS Tracker</span>
+          </Link>
+        </div>
+
+        {/* Navigation */}
+        <nav className="flex-1 space-y-1">
+          {navItems.map((item) => {
+            const Icon = item.icon
+            const isActive = pathname === item.href
+            return (
+              <Link key={item.href} href={item.href}>
+                <div className={cn(
+                  "flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-all",
+                  isActive 
+                    ? "bg-primary text-primary-foreground" 
+                    : "text-muted-foreground hover:bg-muted hover:text-foreground"
+                )}>
+                  <Icon className="h-5 w-5" />
+                  {item.label}
+                </div>
+              </Link>
+            )
+          })}
+        </nav>
+
+        {/* Bottom Actions */}
+        <div className="border-t pt-4 space-y-1">
+          <Button 
+            variant="ghost" 
+            className="w-full justify-start text-muted-foreground hover:text-foreground"
+            onClick={handleLogout}
+          >
+            <LogOut className="mr-3 h-5 w-5" />
+            Sign Out
+          </Button>
+        </div>
+      </div>
+    </aside>
+  )
+}

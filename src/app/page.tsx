@@ -6,6 +6,7 @@ import { StatsCards } from "@/components/dashboard/stats-cards"
 import { RecentActivity } from "@/components/dashboard/recent-activity"
 import { NetProgressionChart } from "@/components/analytics/net-progression-chart"
 import { SubjectRadar } from "@/components/analytics/subject-radar"
+import { QuickActions } from "@/components/dashboard/quick-actions"
 
 export default async function Home() {
   const cookieStore = await cookies()
@@ -15,6 +16,8 @@ export default async function Home() {
     { cookies: { getAll: () => cookieStore.getAll(), setAll: () => {} } }
   )
 
+  const { data: { user } } = await supabase.auth.getUser()
+
   // Fetch Books for total units
   const { data: books } = await supabase.from('books').select('completed_units')
   
@@ -23,6 +26,16 @@ export default async function Home() {
 
   // Fetch Results for Radar
   const { data: results } = await supabase.from('exam_results').select('*, subjects(name)')
+
+  // Fetch today's study sessions
+  const today = new Date().toISOString().split('T')[0]
+  const { data: todaySessions } = await supabase
+    .from('study_sessions')
+    .select('duration_minutes')
+    .eq('user_id', user?.id)
+    .eq('session_date', today)
+  
+  const todayStudyMinutes = todaySessions?.reduce((acc, s) => acc + s.duration_minutes, 0) || 0
   
   // Calculate Stats
   const tytExams = exams?.filter(e => e.type === 'TYT') || []
@@ -38,10 +51,10 @@ export default async function Home() {
     
   const totalUnits = books?.reduce((acc, curr) => acc + (curr.completed_units || 0), 0) || 0
   
-  // Days Left Logic (Target: June 15, 2025)
-  const targetDate = new Date('2025-06-15')
-  const today = new Date()
-  const daysLeft = Math.max(0, Math.ceil((targetDate.getTime() - today.getTime()) / (1000 * 60 * 60 * 24)))
+  // Days Left Logic (Target: June 14, 2026 - YKS 2026)
+  const targetDate = new Date('2026-06-14')
+  const todayDate = new Date()
+  const daysLeft = Math.max(0, Math.ceil((targetDate.getTime() - todayDate.getTime()) / (1000 * 60 * 60 * 24)))
 
   // Recent Activity (Last 5 exams)
   const recentExams = [...(exams || [])].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()).slice(0, 5)
@@ -75,12 +88,16 @@ export default async function Home() {
     <main className="flex min-h-screen flex-col p-6 md:p-10 bg-muted/20 space-y-6">
       <DashboardHeader />
       
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+      {/* Quick Actions */}
+      <QuickActions />
+      
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-5">
         <StatsCards 
             tytAvg={tytAvg > 0 ? tytAvg : null} 
             aytAvg={aytAvg > 0 ? aytAvg : null}
             totalQuestions={totalUnits}
             daysLeft={daysLeft}
+            todayStudyMinutes={todayStudyMinutes}
         />
       </div>
 
