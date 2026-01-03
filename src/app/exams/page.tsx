@@ -1,0 +1,92 @@
+
+import { createClient } from "@/lib/supabase/client" // Wait, we should use server component pattern if possible.
+// Actually, for page.tsx, we can use createServerClient if we want server rendering.
+import { createServerClient } from '@supabase/ssr'
+import { cookies } from 'next/headers'
+import Link from "next/link"
+import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
+import { Plus } from "lucide-react"
+
+export default async function ExamsPage() {
+  const cookieStore = await cookies()
+  const supabase = createServerClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    {
+      cookies: {
+        getAll() {
+          return cookieStore.getAll()
+        },
+        setAll(cookiesToSet) {
+             try {
+                cookiesToSet.forEach(({ name, value, options }) =>
+                  cookieStore.set(name, value, options)
+                )
+              } catch {
+              }
+        },
+      },
+    }
+  )
+
+  const { data: exams } = await supabase
+    .from('exams')
+    .select('*')
+    .order('date', { ascending: false })
+
+  return (
+    <div className="container mx-auto py-10 px-4 space-y-8">
+      <div className="flex items-center justify-between">
+        <div>
+           <h2 className="text-3xl font-bold tracking-tight">Exam History</h2>
+           <p className="text-muted-foreground">Track your progress over time.</p>
+        </div>
+        <Link href="/exams/new">
+            <Button>
+                <Plus className="mr-2 h-4 w-4" /> Add One
+            </Button>
+        </Link>
+      </div>
+
+      <Card className="bg-card/50 backdrop-blur-sm">
+        <CardContent className="p-0">
+            <Table>
+                <TableHeader>
+                    <TableRow>
+                        <TableHead>Date</TableHead>
+                        <TableHead>Type</TableHead>
+                        <TableHead>Total Net</TableHead>
+                        <TableHead className="text-right">Actions</TableHead>
+                    </TableRow>
+                </TableHeader>
+                <TableBody>
+                    {exams?.length === 0 && (
+                        <TableRow>
+                            <TableCell colSpan={4} className="text-center h-24 text-muted-foreground">
+                                No exams recorded yet.
+                            </TableCell>
+                        </TableRow>
+                    )}
+                    {exams?.map((exam) => (
+                        <TableRow key={exam.id}>
+                            <TableCell>{new Date(exam.date).toLocaleDateString()}</TableCell>
+                            <TableCell>
+                                <span className={`font-bold ${exam.type === 'TYT' ? 'text-indigo-500' : 'text-rose-500'}`}>
+                                    {exam.type}
+                                </span>
+                            </TableCell>
+                            <TableCell className="font-mono font-medium">{exam.total_net}</TableCell>
+                            <TableCell className="text-right">
+                                <Button variant="ghost" size="sm">View</Button>
+                            </TableCell>
+                        </TableRow>
+                    ))}
+                </TableBody>
+            </Table>
+        </CardContent>
+      </Card>
+    </div>
+  )
+}

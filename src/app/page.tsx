@@ -1,65 +1,99 @@
-import Image from "next/image";
 
-export default function Home() {
+import { createServerClient } from '@supabase/ssr'
+import { cookies } from 'next/headers'
+import { DashboardHeader } from "@/components/dashboard/header"
+import { StatsCards } from "@/components/dashboard/stats-cards"
+import { RecentActivity } from "@/components/dashboard/recent-activity"
+import { NetProgressionChart } from "@/components/analytics/net-progression-chart"
+import { SubjectRadar } from "@/components/analytics/subject-radar"
+
+export default async function Home() {
+  const cookieStore = await cookies()
+  const supabase = createServerClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    { cookies: { getAll: () => cookieStore.getAll(), setAll: () => {} } }
+  )
+
+  // Fetch Books for total units
+  const { data: books } = await supabase.from('books').select('completed_units')
+  
+  // Fetch Exams
+  const { data: exams } = await supabase.from('exams').select('*').order('date', { ascending: true })
+
+  // Fetch Results for Radar
+  const { data: results } = await supabase.from('exam_results').select('*, subjects(name)')
+  
+  // Calculate Stats
+  const tytExams = exams?.filter(e => e.type === 'TYT') || []
+  const aytExams = exams?.filter(e => e.type === 'AYT') || []
+  
+  const tytAvg = tytExams.length > 0 
+    ? tytExams.reduce((acc, curr) => acc + (curr.total_net || 0), 0) / tytExams.length 
+    : 0
+    
+  const aytAvg = aytExams.length > 0 
+    ? aytExams.reduce((acc, curr) => acc + (curr.total_net || 0), 0) / aytExams.length 
+    : 0
+    
+  const totalUnits = books?.reduce((acc, curr) => acc + (curr.completed_units || 0), 0) || 0
+  
+  // Days Left Logic (Target: June 15, 2025)
+  const targetDate = new Date('2025-06-15')
+  const today = new Date()
+  const daysLeft = Math.max(0, Math.ceil((targetDate.getTime() - today.getTime()) / (1000 * 60 * 60 * 24)))
+
+  // Recent Activity (Last 5 exams)
+  const recentExams = [...(exams || [])].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()).slice(0, 5)
+
+  // Process Net Progression Data
+  const progressionData = exams?.map(e => ({
+      date: new Date(e.date).toLocaleDateString(),
+      TYT: e.type === 'TYT' ? e.total_net : null,
+      AYT: e.type === 'AYT' ? e.total_net : null,
+  })) || []
+
+  // Process Radar Data
+  const subjectStats: Record<string, { totalNet: number, count: number }> = {}
+  
+  results?.forEach(r => {
+      const subjectName = r.subjects?.name || 'Unknown'
+      if (!subjectStats[subjectName]) subjectStats[subjectName] = { totalNet: 0, count: 0 }
+      
+      const net = r.correct_count - (r.incorrect_count * 0.25)
+      subjectStats[subjectName].totalNet += net
+      subjectStats[subjectName].count += 1
+  })
+
+  const radarData = Object.entries(subjectStats).map(([subject, stats]) => ({
+      subject,
+      score: Math.round(stats.totalNet / stats.count), // Average Net
+      fullMark: 40 // Placeholder, we don't track max score per subject broadly yet
+  }))
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
+    <main className="flex min-h-screen flex-col p-6 md:p-10 bg-muted/20 space-y-6">
+      <DashboardHeader />
+      
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+        <StatsCards 
+            tytAvg={tytAvg > 0 ? tytAvg : null} 
+            aytAvg={aytAvg > 0 ? aytAvg : null}
+            totalQuestions={totalUnits}
+            daysLeft={daysLeft}
         />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
-  );
+      </div>
+
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
+         <div className="col-span-1 md:col-span-2 lg:col-span-4 space-y-4">
+            <NetProgressionChart data={progressionData} />
+            <RecentActivity activities={recentExams} />
+         </div>
+         <div className="col-span-1 md:col-span-2 lg:col-span-3">
+            <SubjectRadar data={radarData} />
+            {/* Book Progress could go here too */}
+         </div>
+      </div>
+    </main>
+  )
 }
