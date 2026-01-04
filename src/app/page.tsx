@@ -16,18 +16,20 @@ export default async function Home() {
     { cookies: { getAll: () => cookieStore.getAll(), setAll: () => {} } }
   )
 
-  const { data: { user } } = await supabase.auth.getUser()
+  // Parallel fetch for initial data
+  const [
+      { data: { user } }, 
+      { data: books }, 
+      { data: exams }, 
+      { data: results }
+  ] = await Promise.all([
+      supabase.auth.getUser(),
+      supabase.from('books').select('completed_units'),
+      supabase.from('exams').select('*').order('date', { ascending: true }),
+      supabase.from('exam_results').select('*, subjects(name)')
+  ])
 
-  // Fetch Books for total units
-  const { data: books } = await supabase.from('books').select('completed_units')
-  
-  // Fetch Exams
-  const { data: exams } = await supabase.from('exams').select('*').order('date', { ascending: true })
-
-  // Fetch Results for Radar
-  const { data: results } = await supabase.from('exam_results').select('*, subjects(name)')
-
-  // Fetch today's study sessions
+  // Fetch today's study sessions (dependent on user)
   const today = new Date().toISOString().split('T')[0]
   const { data: todaySessions } = await supabase
     .from('study_sessions')

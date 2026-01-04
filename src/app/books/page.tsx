@@ -21,6 +21,14 @@ export default async function BooksPage() {
     }
   )
 
+  const { data: { user } } = await supabase.auth.getUser()
+  
+  let userField = undefined
+  if (user) {
+      const { data: profile } = await supabase.from('profiles').select('study_field').eq('id', user.id).single()
+      userField = profile?.study_field
+  }
+
   const { data: books } = await supabase
     .from('books')
     .select('*, subjects(name)')
@@ -33,7 +41,7 @@ export default async function BooksPage() {
            <h2 className="text-3xl font-bold tracking-tight">Kütüphane</h2>
            <p className="text-muted-foreground">Çalışma kaynaklarınızı yönetin ve ilerlemenizi takip edin.</p>
         </div>
-        <AddBookDialog />
+        <AddBookDialog userField={userField} />
       </div>
 
       <div className="mt-8">
