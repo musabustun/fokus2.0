@@ -16,6 +16,7 @@ import {
 import { Button } from "@/components/ui/button"
 import { createClient } from "@/lib/supabase/client"
 import { useRouter } from "next/navigation"
+import { ModeToggle } from "@/components/mode-toggle"
 
 const navItems = [
   { href: "/", label: "Kontrol Paneli", icon: Home },
@@ -71,6 +72,10 @@ export function Sidebar() {
 
         {/* Bottom Actions */}
         <div className="border-t pt-4 space-y-1">
+          <div className="flex items-center justify-between px-2 mb-2">
+            <span className="text-sm font-medium text-muted-foreground">Görünüm</span>
+            <ModeToggle />
+          </div>
           <Button 
             variant="ghost" 
             className="w-full justify-start text-muted-foreground hover:text-foreground"

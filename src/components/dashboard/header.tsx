@@ -1,5 +1,5 @@
 
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { ModeToggle } from "@/components/mode-toggle"
 
 export function DashboardHeader() {
   return (
@@ -12,6 +12,7 @@ export function DashboardHeader() {
         <span className="text-sm text-muted-foreground hidden md:block">
             {new Date().toLocaleDateString('tr-TR', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
         </span>
+        <ModeToggle />
       </div>
     </div>
   )
