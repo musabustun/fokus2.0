@@ -18,13 +18,13 @@ export async function addBook(previousState: any, formData: FormData) {
   const title = formData.get('title') as string
   const totalUnits = parseInt(formData.get('totalUnits') as string)
   const subjectName = formData.get('subject') as string
+  const examType = formData.get('examType') as string || 'TYT'
 
   if (!title || !totalUnits) {
       return { error: "Title and Total Units are required" }
   }
 
-  // Find or Create Subject ID (Simplified logic, mimicking saveExam)
-   // Re-mapping frontend IDs to likely DB names:
+  // Find or Create Subject ID
    const nameMap: Record<string, string> = {
     'TURKISH': 'Türkçe',
     'MATH': 'Matematik',
@@ -36,16 +36,19 @@ export async function addBook(previousState: any, formData: FormData) {
     'PHILOSOPHY': 'Felsefe',
     'RELIGION': 'Din Kültürü',
     'LITERATURE': 'Edebiyat',
+    'HISTORY_1': 'Tarih-1',
+    'HISTORY_2': 'Tarih-2',
+    'GEOGRAPHY_1': 'Coğrafya-1',
+    'GEOGRAPHY_2': 'Coğrafya-2',
+    'PHILOSOPHY_GRP': 'Felsefe Grubu',
+    'LANGUAGE': 'Yabancı Dil'
 }
   const dbName = nameMap[subjectName] || subjectName
 
-  let { data: subject } = await supabase.from('subjects').select('id').eq('name', dbName).single()
+  let { data: subject } = await supabase.from('subjects').select('id').eq('name', dbName).eq('type', examType).single()
   
   if (!subject) {
-      // If subject doesn't exist, generic type 'TYT' or 'AYT' default?
-      // Let's assume TYT for simple books or we need a type input.
-      // For now, insert with default TYT if missing.
-      const { data: newSubject } = await supabase.from('subjects').insert({ name: dbName, type: 'TYT' }).select().single()
+      const { data: newSubject } = await supabase.from('subjects').insert({ name: dbName, type: examType }).select().single()
       subject = newSubject
   }
 

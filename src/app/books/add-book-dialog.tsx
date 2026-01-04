@@ -14,7 +14,6 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { getSubjects, TOPICS_BY_SUBJECT } from "@/lib/constants"
 
 const initialState = {
-const initialState = {
     error: '',
     success: false
 }
@@ -48,6 +47,14 @@ export function AddBookDialog({ userField }: { userField?: string }) {
 
     const availableSubjects = getSubjects(examType, userField)
     const availableTopics = selectedSubject && TOPICS_BY_SUBJECT[selectedSubject] ? TOPICS_BY_SUBJECT[selectedSubject] : []
+
+    const toggleAllTopics = () => {
+        if (selectedTopics.length === availableTopics.length) {
+            setSelectedTopics([])
+        } else {
+            setSelectedTopics([...availableTopics])
+        }
+    }
 
     const [state, formAction, isPending] = useActionState(async (prev: any, formData: FormData) => {
         // Append topic count as totalUnits if topics are selected
@@ -95,6 +102,7 @@ export function AddBookDialog({ userField }: { userField?: string }) {
                                 <TabsTrigger value="AYT">AYT</TabsTrigger>
                             </TabsList>
                         </Tabs>
+                        <input type="hidden" name="examType" value={examType} />
                     </div>
 
                     {/* Subject Selection */}
