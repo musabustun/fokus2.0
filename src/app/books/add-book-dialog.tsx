@@ -132,7 +132,18 @@ export function AddBookDialog({ userField }: { userField?: string }) {
                     {selectedSubject && availableTopics.length > 0 && (
                         <div className="space-y-3 border rounded-lg p-4 bg-muted/20">
                             <div className="flex items-center justify-between">
-                                <Label>Konular ({selectedTopics.length} seçildi)</Label>
+                                <div className="flex items-center gap-2">
+                                    <Label>Konular ({selectedTopics.length} seçildi)</Label>
+                                    <Button 
+                                        type="button" 
+                                        variant="outline" 
+                                        size="sm" 
+                                        className="h-7 px-2 text-xs"
+                                        onClick={toggleAllTopics}
+                                    >
+                                        {selectedTopics.length === availableTopics.length ? 'Tümünü Kaldır' : 'Tümünü Seç'}
+                                    </Button>
+                                </div>
                                 <div className="text-xs text-muted-foreground">
                                     Kitapta bulunan konuları seçin
                                 </div>
