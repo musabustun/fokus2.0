@@ -6,10 +6,10 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { BookOpen, Calculator, Scale, Languages, Check } from "lucide-react"
 
 const fields = [
-  { id: 'SAYISAL', label: 'Sayısal', description: 'Math & Science', icon: Calculator, color: 'text-indigo-500' },
-  { id: 'ESIT_AGIRLIK', label: 'Eşit Ağırlık', description: 'Turkish & Math', icon: Scale, color: 'text-blue-500' },
-  { id: 'SOZEL', label: 'Sözel', description: 'Social Sciences', icon: BookOpen, color: 'text-rose-500' },
-  { id: 'DIL', label: 'Dil', description: 'Foreign Language', icon: Languages, color: 'text-orange-500' },
+  { id: 'SAYISAL', label: 'Sayısal', description: 'Matematik & Fen', icon: Calculator, color: 'text-indigo-500' },
+  { id: 'ESIT_AGIRLIK', label: 'Eşit Ağırlık', description: 'Türkçe & Matematik', icon: Scale, color: 'text-blue-500' },
+  { id: 'SOZEL', label: 'Sözel', description: 'Sosyal Bilimler', icon: BookOpen, color: 'text-rose-500' },
+  { id: 'DIL', label: 'Dil', description: 'Yabancı Dil', icon: Languages, color: 'text-orange-500' },
 ]
 
 export default function OnboardingPage() {
@@ -39,7 +39,7 @@ export default function OnboardingPage() {
       }
       
       // This is a real error
-      setError(err?.message || 'Failed to update study field. Please try again.')
+      setError(err?.message || 'Çalışma alanı güncellenemedi. Lütfen tekrar deneyin.')
       setLoading(false)
       setSelectedField(null)
     }
@@ -49,8 +49,8 @@ export default function OnboardingPage() {
     <div className="min-h-screen flex items-center justify-center p-6 bg-muted/30">
       <div className="max-w-4xl w-full space-y-8">
         <div className="text-center space-y-2">
-          <h1 className="text-3xl font-bold tracking-tight">Welcome to YKS Tracker</h1>
-          <p className="text-muted-foreground text-lg">Select your study field to customize your dashboard.</p>
+          <h1 className="text-3xl font-bold tracking-tight">YKS Tracker&apos;a Hoş Geldiniz</h1>
+          <p className="text-muted-foreground text-lg">Kontrol panelinizi özelleştirmek için çalışma alanınızı seçin.</p>
           {error && (
             <div className="mt-4 p-3 bg-destructive/10 border border-destructive/20 rounded-md">
               <p className="text-sm text-destructive">{error}</p>

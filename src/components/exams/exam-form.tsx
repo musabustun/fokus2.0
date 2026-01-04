@@ -11,29 +11,29 @@ import { useActionState } from "react"
 // import { toast } from "sonner" // Assuming sonner or toast is available, but maybe not installed yet.
 
 const TYT_SUBJECTS = [
-  { id: 'TURKISH', name: 'Turkish', max: 40 },
-  { id: 'MATH', name: 'Mathematics', max: 40 },
-  { id: 'PHYSICS', name: 'Physics', max: 7 },
-  { id: 'CHEMISTRY', name: 'Chemistry', max: 7 },
-  { id: 'BIOLOGY', name: 'Biology', max: 6 },
-  { id: 'HISTORY', name: 'History', max: 5 },
-  { id: 'GEOGRAPHY', name: 'Geography', max: 5 },
-  { id: 'PHILOSOPHY', name: 'Philosophy', max: 5 },
-  { id: 'RELIGION', name: 'Religion', max: 5 },
+  { id: 'TURKISH', name: 'Türkçe', max: 40 },
+  { id: 'MATH', name: 'Matematik', max: 40 },
+  { id: 'PHYSICS', name: 'Fizik', max: 7 },
+  { id: 'CHEMISTRY', name: 'Kimya', max: 7 },
+  { id: 'BIOLOGY', name: 'Biyoloji', max: 6 },
+  { id: 'HISTORY', name: 'Tarih', max: 5 },
+  { id: 'GEOGRAPHY', name: 'Coğrafya', max: 5 },
+  { id: 'PHILOSOPHY', name: 'Felsefe', max: 5 },
+  { id: 'RELIGION', name: 'Din Kültürü', max: 5 },
 ]
 
 const AYT_SUBJECTS = [
-  { id: 'MATH', name: 'Mathematics', max: 40 },
-  { id: 'PHYSICS', name: 'Physics', max: 14 },
-  { id: 'CHEMISTRY', name: 'Chemistry', max: 13 },
-  { id: 'BIOLOGY', name: 'Biology', max: 13 },
-  { id: 'LITERATURE', name: 'Literature', max: 24 },
-  { id: 'HISTORY_1', name: 'History-1', max: 10 },
-  { id: 'GEOGRAPHY_1', name: 'Geography-1', max: 6 },
-  { id: 'HISTORY_2', name: 'History-2', max: 11 },
-  { id: 'GEOGRAPHY_2', name: 'Geography-2', max: 11 },
-  { id: 'PHILOSOPHY_GRP', name: 'Philosophy Grp', max: 12 },
-  { id: 'RELIGION', name: 'Religion', max: 6 },
+  { id: 'MATH', name: 'Matematik', max: 40 },
+  { id: 'PHYSICS', name: 'Fizik', max: 14 },
+  { id: 'CHEMISTRY', name: 'Kimya', max: 13 },
+  { id: 'BIOLOGY', name: 'Biyoloji', max: 13 },
+  { id: 'LITERATURE', name: 'Edebiyat', max: 24 },
+  { id: 'HISTORY_1', name: 'Tarih-1', max: 10 },
+  { id: 'GEOGRAPHY_1', name: 'Coğrafya-1', max: 6 },
+  { id: 'HISTORY_2', name: 'Tarih-2', max: 11 },
+  { id: 'GEOGRAPHY_2', name: 'Coğrafya-2', max: 11 },
+  { id: 'PHILOSOPHY_GRP', name: 'Felsefe Grubu', max: 12 },
+  { id: 'RELIGION', name: 'Din Kültürü', max: 6 },
 ]
 
 export function ExamForm() {
@@ -81,20 +81,20 @@ export function ExamForm() {
   return (
     <Card className="w-full max-w-4xl mx-auto shadow-lg bg-card/80 backdrop-blur">
       <CardHeader>
-        <CardTitle>Add New Mock Exam Result</CardTitle>
-        <CardDescription>Enter your correct and incorrect answers to calculate your Net score.</CardDescription>
+        <CardTitle>Yeni Deneme Sınavı Sonucu Ekle</CardTitle>
+        <CardDescription>Net puanınızı hesaplamak için doğru ve yanlış sayılarınızı girin.</CardDescription>
       </CardHeader>
       <CardContent>
         <div className="flex flex-col gap-6">
             <div className="flex items-center justify-between">
                 <Tabs value={examType} onValueChange={(v) => setExamType(v as any)} className="w-[400px]">
                 <TabsList className="grid w-full grid-cols-2">
-                    <TabsTrigger value="TYT">TYT (Basic)</TabsTrigger>
-                    <TabsTrigger value="AYT">AYT (Field)</TabsTrigger>
+                    <TabsTrigger value="TYT">TYT (Temel)</TabsTrigger>
+                    <TabsTrigger value="AYT">AYT (Alan)</TabsTrigger>
                 </TabsList>
                 </Tabs>
                 <div className="text-right">
-                    <div className="text-sm text-muted-foreground">Total Net</div>
+                    <div className="text-sm text-muted-foreground">Toplam Net</div>
                     <div className="text-4xl font-bold text-primary">{totalNet.toFixed(2)}</div>
                 </div>
             </div>
@@ -117,7 +117,7 @@ export function ExamForm() {
                                 </CardHeader>
                                 <CardContent className="p-4 pt-2 grid grid-cols-2 gap-2">
                                     <div className="space-y-1">
-                                        <Label htmlFor={`${subject.id}-correct`} className="text-xs text-muted-foreground">Correct</Label>
+                                        <Label htmlFor={`${subject.id}-correct`} className="text-xs text-muted-foreground">Doğru</Label>
                                         <Input 
                                             id={`${subject.id}-correct`}
                                             type="number" 
@@ -129,7 +129,7 @@ export function ExamForm() {
                                         />
                                     </div>
                                     <div className="space-y-1">
-                                         <Label htmlFor={`${subject.id}-incorrect`} className="text-xs text-muted-foreground">Incorrect</Label>
+                                         <Label htmlFor={`${subject.id}-incorrect`} className="text-xs text-muted-foreground">Yanlış</Label>
                                         <Input 
                                             id={`${subject.id}-incorrect`}
                                             type="number" 
@@ -148,7 +148,7 @@ export function ExamForm() {
 
                 <div className="pt-4 flex justify-end">
                     <Button type="submit" size="lg" className="px-8">
-                        Save Exam Result
+                        Sınav Sonucunu Kaydet
                     </Button>
                 </div>
             </form>

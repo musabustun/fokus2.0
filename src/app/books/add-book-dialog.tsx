@@ -10,7 +10,16 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Plus } from "lucide-react"
 
-const SUBJECTS = ['MATH', 'TURKISH', 'PHYSICS', 'CHEMISTRY', 'BIOLOGY', 'HISTORY', 'GEOGRAPHY', 'PHILOSOPHY']
+const SUBJECTS = [
+    { label: 'MATEMATİK', value: 'MATH' },
+    { label: 'TÜRKÇE', value: 'TURKISH' },
+    { label: 'FİZİK', value: 'PHYSICS' },
+    { label: 'KİMYA', value: 'CHEMISTRY' },
+    { label: 'BİYOLOJİ', value: 'BIOLOGY' },
+    { label: 'TARİH', value: 'HISTORY' },
+    { label: 'COĞRAFYA', value: 'GEOGRAPHY' },
+    { label: 'FELSEFE', value: 'PHILOSOPHY' }
+]
 
 const initialState = {
     error: '',
@@ -37,14 +46,14 @@ export function AddBookDialog() {
         <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
                 <Button>
-                    <Plus className="mr-2 h-4 w-4" /> Add Book
+                    <Plus className="mr-2 h-4 w-4" /> Kitap Ekle
                 </Button>
             </DialogTrigger>
             <DialogContent className="sm:max-w-[425px]">
                 <DialogHeader>
-                    <DialogTitle>Add New Book</DialogTitle>
+                    <DialogTitle>Yeni Kitap Ekle</DialogTitle>
                     <DialogDescription>
-                        Track your progress.
+                        Gelişiminizi takip edin.
                     </DialogDescription>
                 </DialogHeader>
                 <form action={formAction} className="space-y-4 py-4">
@@ -52,29 +61,29 @@ export function AddBookDialog() {
                         <div className="text-destructive text-sm bg-destructive/10 p-2 rounded">{state.error}</div>
                     )}
                     <div className="grid grid-cols-4 items-center gap-4">
-                        <Label htmlFor="title" className="text-right">Title</Label>
-                        <Input id="title" name="title" className="col-span-3" placeholder="345 Math Book" required />
+                        <Label htmlFor="title" className="text-right">Başlık</Label>
+                        <Input id="title" name="title" className="col-span-3" placeholder="345 Matematik Kitabı" required />
                     </div>
                     <div className="grid grid-cols-4 items-center gap-4">
-                        <Label htmlFor="subject" className="text-right">Subject</Label>
+                        <Label htmlFor="subject" className="text-right">Ders</Label>
                         <div className="col-span-3">
                              <Select name="subject" required>
                                 <SelectTrigger>
-                                    <SelectValue placeholder="Select subject" />
+                                    <SelectValue placeholder="Ders seçin" />
                                 </SelectTrigger>
                                 <SelectContent>
-                                    {SUBJECTS.map(s => <SelectItem key={s} value={s}>{s}</SelectItem>)}
+                                    {SUBJECTS.map(s => <SelectItem key={s.value} value={s.value}>{s.label}</SelectItem>)}
                                 </SelectContent>
                             </Select>
                         </div>
                     </div>
                     <div className="grid grid-cols-4 items-center gap-4">
-                        <Label htmlFor="totalUnits" className="text-right">Total Units</Label>
-                        <Input id="totalUnits" name="totalUnits" type="number" className="col-span-3" placeholder="Total pages or tests" required min="1" />
+                        <Label htmlFor="totalUnits" className="text-right">Toplam Ünite</Label>
+                        <Input id="totalUnits" name="totalUnits" type="number" className="col-span-3" placeholder="Toplam sayfa veya test sayısı" required min="1" />
                     </div>
                     <DialogFooter>
                         <Button type="submit" disabled={isPending}>
-                            {isPending ? 'Saving...' : 'Save Book'}
+                            {isPending ? 'Kaydediliyor...' : 'Kitabı Kaydet'}
                         </Button>
                     </DialogFooter>
                 </form>

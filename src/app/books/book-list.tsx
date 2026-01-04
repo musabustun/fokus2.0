@@ -41,7 +41,7 @@ function BookCard({ book }: { book: any }) {
     }
 
     const handleDelete = async () => {
-        if(!confirm("Are you sure?")) return
+        if(!confirm("Emin misiniz?")) return
         setLoading(true)
         await deleteBook(book.id)
     }
@@ -53,14 +53,14 @@ function BookCard({ book }: { book: any }) {
                     <div>
                         <CardTitle className="line-clamp-1 text-lg">{book.title}</CardTitle>
                         <p className="text-xs text-muted-foreground mt-1">
-                            {book.subjects?.name || 'General'}
+                            {book.subjects?.name || 'Genel'}
                         </p>
                     </div>
                 </div>
             </CardHeader>
             <CardContent className="space-y-4">
                  <div className="flex justify-between text-sm">
-                    <span className="text-muted-foreground">{progress} / {book.total_units} units</span>
+                    <span className="text-muted-foreground">{progress} / {book.total_units} ünite</span>
                     <span className="font-bold text-primary">{percentage}%</span>
                  </div>
                  <Progress value={percentage} className="h-2" />

@@ -16,9 +16,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "YKS Tracker - Track Your Exam Progress",
-  description: "Track your YKS exam preparation progress, study sessions, and goals. Stay organized and ace your university entrance exam.",
-  keywords: ["YKS", "exam", "study", "tracker", "TYT", "AYT", "university", "preparation"],
+  title: "YKS Tracker - Sınav Gelişiminizi Takip Edin",
+  description: "YKS sınav hazırlık sürecinizi, çalışma oturumlarınızı ve hedeflerinizi takip edin. Organize kalın ve üniversite sınavında başarıyı yakalayın.",
+  keywords: ["YKS", "sınav", "çalışma", "takip", "TYT", "AYT", "üniversite", "hazırlık"],
 };
 
 export default function RootLayout({
@@ -27,7 +27,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="tr" suppressHydrationWarning>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >

@@ -21,7 +21,7 @@ export default function LoginPage() {
         <CardHeader className="space-y-1 text-center">
           <CardTitle className="text-2xl font-bold tracking-tight">YKS Tracker</CardTitle>
           <CardDescription>
-            Enter your email to sign in to your dashboard
+            Paneline giriş yapmak için e-posta adresini gir
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -32,23 +32,23 @@ export default function LoginPage() {
               </div>
             )}
             <div className="space-y-2">
-              <Label htmlFor="email">Email</Label>
-              <Input id="email" name="email" type="email" placeholder="m@example.com" required />
+              <Label htmlFor="email">E-posta</Label>
+              <Input id="email" name="email" type="email" placeholder="m@örnek.com" required />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="password">Password</Label>
+              <Label htmlFor="password">Şifre</Label>
               <Input id="password" name="password" type="password" required />
             </div>
             <Button type="submit" className="w-full bg-primary hover:bg-primary/90" disabled={isPending}>
-              {isPending ? 'Signing in...' : 'Sign In'}
+              {isPending ? 'Giriş yapılıyor...' : 'Giriş Yap'}
             </Button>
           </form>
         </CardContent>
         <CardFooter className="flex flex-col gap-2 border-t pt-4">
           <div className="text-sm text-muted-foreground text-center">
-            Don&apos;t have an account?{" "}
+            Hesabın yok mu?{" "}
             <Link href="/register" className="text-primary hover:underline font-medium">
-              Sign up
+              Kayıt ol
             </Link>
           </div>
         </CardFooter>

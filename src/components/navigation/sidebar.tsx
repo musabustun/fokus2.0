@@ -18,11 +18,11 @@ import { createClient } from "@/lib/supabase/client"
 import { useRouter } from "next/navigation"
 
 const navItems = [
-  { href: "/", label: "Dashboard", icon: Home },
-  { href: "/study", label: "Study Log", icon: Clock },
-  { href: "/exams", label: "Exams", icon: ClipboardList },
-  { href: "/books", label: "Library", icon: BookOpen },
-  { href: "/goals", label: "Goals", icon: Target },
+  { href: "/", label: "Kontrol Paneli", icon: Home },
+  { href: "/study", label: "Ders Takipçisi", icon: Clock },
+  { href: "/exams", label: "Sınav Geçmişi", icon: ClipboardList },
+  { href: "/books", label: "Kütüphane", icon: BookOpen },
+  { href: "/goals", label: "Hedefler", icon: Target },
 ]
 
 export function Sidebar() {
@@ -77,7 +77,7 @@ export function Sidebar() {
             onClick={handleLogout}
           >
             <LogOut className="mr-3 h-5 w-5" />
-            Sign Out
+            Çıkış Yap
           </Button>
         </div>
       </div>

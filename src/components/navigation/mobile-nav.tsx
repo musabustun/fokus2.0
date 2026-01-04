@@ -6,11 +6,11 @@ import { cn } from "@/lib/utils"
 import { Home, BookOpen, ClipboardList, Target, Clock } from "lucide-react"
 
 const navItems = [
-  { href: "/", label: "Home", icon: Home },
-  { href: "/study", label: "Study", icon: Clock },
-  { href: "/exams", label: "Exams", icon: ClipboardList },
-  { href: "/books", label: "Books", icon: BookOpen },
-  { href: "/goals", label: "Goals", icon: Target },
+  { href: "/", label: "Ana Sayfa", icon: Home },
+  { href: "/study", label: "Çalışma", icon: Clock },
+  { href: "/exams", label: "Sınavlar", icon: ClipboardList },
+  { href: "/books", label: "Kitaplar", icon: BookOpen },
+  { href: "/goals", label: "Hedefler", icon: Target },
 ]
 
 export function MobileNav() {

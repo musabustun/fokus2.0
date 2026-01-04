@@ -40,12 +40,12 @@ export default async function ExamsPage() {
     <div className="container mx-auto py-10 px-4 space-y-8">
       <div className="flex items-center justify-between">
         <div>
-           <h2 className="text-3xl font-bold tracking-tight">Exam History</h2>
-           <p className="text-muted-foreground">Track your progress over time.</p>
+           <h2 className="text-3xl font-bold tracking-tight">Sınav Geçmişi</h2>
+           <p className="text-muted-foreground">Zaman içindeki ilerlemenizi takip edin.</p>
         </div>
         <Link href="/exams/new">
             <Button>
-                <Plus className="mr-2 h-4 w-4" /> Add One
+                <Plus className="mr-2 h-4 w-4" /> Yeni Ekle
             </Button>
         </Link>
       </div>
@@ -55,23 +55,23 @@ export default async function ExamsPage() {
             <Table>
                 <TableHeader>
                     <TableRow>
-                        <TableHead>Date</TableHead>
-                        <TableHead>Type</TableHead>
-                        <TableHead>Total Net</TableHead>
-                        <TableHead className="text-right">Actions</TableHead>
+                        <TableHead>Tarih</TableHead>
+                        <TableHead>Tür</TableHead>
+                        <TableHead>Toplam Net</TableHead>
+                        <TableHead className="text-right">İşlemler</TableHead>
                     </TableRow>
                 </TableHeader>
                 <TableBody>
                     {exams?.length === 0 && (
                         <TableRow>
                             <TableCell colSpan={4} className="text-center h-24 text-muted-foreground">
-                                No exams recorded yet.
+                                Henüz sınav kaydedilmedi.
                             </TableCell>
                         </TableRow>
                     )}
                     {exams?.map((exam) => (
                         <TableRow key={exam.id}>
-                            <TableCell>{new Date(exam.date).toLocaleDateString()}</TableCell>
+                            <TableCell>{new Date(exam.date).toLocaleDateString('tr-TR')}</TableCell>
                             <TableCell>
                                 <span className={`font-bold ${exam.type === 'TYT' ? 'text-indigo-500' : 'text-rose-500'}`}>
                                     {exam.type}
@@ -79,7 +79,7 @@ export default async function ExamsPage() {
                             </TableCell>
                             <TableCell className="font-mono font-medium">{exam.total_net}</TableCell>
                             <TableCell className="text-right">
-                                <Button variant="ghost" size="sm">View</Button>
+                                <Button variant="ghost" size="sm">Görüntüle</Button>
                             </TableCell>
                         </TableRow>
                     ))}

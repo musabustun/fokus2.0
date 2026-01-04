@@ -61,7 +61,7 @@ export default async function Home() {
 
   // Process Net Progression Data
   const progressionData = exams?.map(e => ({
-      date: new Date(e.date).toLocaleDateString(),
+      date: new Date(e.date).toLocaleDateString('tr-TR'),
       TYT: e.type === 'TYT' ? e.total_net : null,
       AYT: e.type === 'AYT' ? e.total_net : null,
   })) || []
@@ -70,7 +70,7 @@ export default async function Home() {
   const subjectStats: Record<string, { totalNet: number, count: number }> = {}
   
   results?.forEach(r => {
-      const subjectName = r.subjects?.name || 'Unknown'
+      const subjectName = r.subjects?.name || 'Bilinmiyor'
       if (!subjectStats[subjectName]) subjectStats[subjectName] = { totalNet: 0, count: 0 }
       
       const net = r.correct_count - (r.incorrect_count * 0.25)

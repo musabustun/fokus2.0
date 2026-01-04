@@ -10,11 +10,11 @@ export function NetProgressionChart({ data }: { data: any[] }) {
       return (
           <Card className="col-span-1 md:col-span-2 lg:col-span-4 bg-card/50 backdrop-blur-sm">
              <CardHeader>
-                <CardTitle>Net Progression</CardTitle>
-                <CardDescription>Track your scores over time.</CardDescription>
+                <CardTitle>Net Gelişimi</CardTitle>
+                <CardDescription>Puanlarınızı zaman içinde takip edin.</CardDescription>
              </CardHeader>
              <CardContent className="h-[300px] flex items-center justify-center text-muted-foreground">
-                 Not enough data yet. Add more exams.
+                 Henüz yeterli veri yok. Daha fazla sınav ekleyin.
              </CardContent>
           </Card>
       )
@@ -23,9 +23,9 @@ export function NetProgressionChart({ data }: { data: any[] }) {
   return (
     <Card className="col-span-1 md:col-span-2 lg:col-span-4 bg-card/50 backdrop-blur-sm shadow-sm hover:shadow-md transition-all">
       <CardHeader>
-        <CardTitle>Net Progression</CardTitle>
+        <CardTitle>Net Gelişimi</CardTitle>
         <CardDescription>
-          Comparison of TYT and AYT performance.
+          TYT ve AYT performansı karşılaştırması.
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -42,6 +42,7 @@ export function NetProgressionChart({ data }: { data: any[] }) {
                 <Legend />
                 <Line 
                     type="monotone" 
+                    name="TYT"
                     dataKey="TYT" 
                     stroke="var(--chart-1)" 
                     strokeWidth={3} 
@@ -51,6 +52,7 @@ export function NetProgressionChart({ data }: { data: any[] }) {
                 />
                 <Line 
                     type="monotone" 
+                    name="AYT"
                     dataKey="AYT" 
                     stroke="var(--chart-2)" 
                     strokeWidth={3} 

@@ -34,7 +34,7 @@ export default async function StudyPage() {
   // Subject breakdown
   const subjectMap: Record<string, number> = {}
   todaySessions?.forEach((s: any) => {
-    const name = s.subjects?.name || 'General'
+    const name = s.subjects?.name || 'Genel'
     subjectMap[name] = (subjectMap[name] || 0) + s.duration_minutes
   })
   const subjectBreakdown = Object.entries(subjectMap).map(([subject, minutes]) => ({ subject, minutes }))
@@ -69,8 +69,8 @@ export default async function StudyPage() {
             </Button>
           </Link>
           <div>
-            <h2 className="text-3xl font-bold tracking-tight">Study Tracker</h2>
-            <p className="text-muted-foreground">Log your study sessions and track your progress.</p>
+            <h2 className="text-3xl font-bold tracking-tight">Ders Takipçisi</h2>
+            <p className="text-muted-foreground">Çalışma oturumlarınızı kaydedin ve ilerlemenizi takip edin.</p>
           </div>
         </div>
       </div>
@@ -89,24 +89,24 @@ export default async function StudyPage() {
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Calendar className="h-5 w-5" />
-            Recent Sessions
+            Son Oturumlar
           </CardTitle>
         </CardHeader>
         <CardContent className="p-0">
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>Date</TableHead>
-                <TableHead>Subject</TableHead>
-                <TableHead>Duration</TableHead>
-                <TableHead>Notes</TableHead>
+                <TableHead>Tarih</TableHead>
+                <TableHead>Ders</TableHead>
+                <TableHead>Süre</TableHead>
+                <TableHead>Notlar</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {(!recentSessions || recentSessions.length === 0) && (
                 <TableRow>
                   <TableCell colSpan={4} className="text-center h-24 text-muted-foreground">
-                    No sessions recorded yet. Start logging your study time!
+                    Henüz kaydedilmiş oturum yok. Çalışma zamanınızı kaydetmeye başlayın!
                   </TableCell>
                 </TableRow>
               )}
@@ -118,18 +118,18 @@ export default async function StudyPage() {
                     <TableCell>
                       <div className="flex items-center gap-2">
                         <Calendar className="h-4 w-4 text-muted-foreground" />
-                        {new Date(session.session_date).toLocaleDateString()}
+                        {new Date(session.session_date).toLocaleDateString('tr-TR')}
                       </div>
                     </TableCell>
                     <TableCell>
                       <span className="font-medium">
-                        {session.subjects?.name || 'General'}
+                        {session.subjects?.name || 'Genel'}
                       </span>
                     </TableCell>
                     <TableCell>
                       <div className="flex items-center gap-2">
                         <Clock className="h-4 w-4 text-muted-foreground" />
-                        {hours > 0 ? `${hours}h ` : ''}{mins}m
+                        {hours > 0 ? `${hours}sa ` : ''}{mins}dk
                       </div>
                     </TableCell>
                     <TableCell className="text-muted-foreground">

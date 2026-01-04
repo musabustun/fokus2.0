@@ -43,7 +43,7 @@ export function GoalCard({ goal }: { goal: Goal }) {
   }
 
   const handleDelete = async () => {
-    if (confirm('Are you sure you want to delete this goal?')) {
+    if (confirm('Bu hedefi silmek istediğinizden emin misiniz?')) {
       await deleteGoal(goal.id)
     }
   }
@@ -53,6 +53,13 @@ export function GoalCard({ goal }: { goal: Goal }) {
     WEEKLY: 'bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-400',
     MONTHLY: 'bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-400',
     EXAM: 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400',
+  }
+
+  const typeLabels: Record<string, string> = {
+    DAILY: 'GÜNLÜK',
+    WEEKLY: 'HAFTALIK',
+    MONTHLY: 'AYLIK',
+    EXAM: 'SINAV',
   }
 
   return (
@@ -65,12 +72,12 @@ export function GoalCard({ goal }: { goal: Goal }) {
             </CardTitle>
             <div className="flex items-center gap-2">
               <Badge variant="secondary" className={typeColors[goal.goal_type] || ''}>
-                {goal.goal_type}
+                {typeLabels[goal.goal_type] || goal.goal_type}
               </Badge>
               {goal.due_date && (
                 <span className="text-xs text-muted-foreground flex items-center gap-1">
                   <Calendar className="h-3 w-3" />
-                  {new Date(goal.due_date).toLocaleDateString()}
+                  {new Date(goal.due_date).toLocaleDateString('tr-TR')}
                 </span>
               )}
             </div>
@@ -104,7 +111,7 @@ export function GoalCard({ goal }: { goal: Goal }) {
         {goal.target_value && !goal.is_completed && (
           <div className="space-y-2">
             <div className="flex items-center justify-between text-sm">
-              <span className="text-muted-foreground">Progress</span>
+              <span className="text-muted-foreground">İlerleme</span>
               <span className="font-medium">{currentValue} / {goal.target_value}</span>
             </div>
             <Progress value={progress} className="h-2" />
@@ -142,7 +149,7 @@ export function GoalCard({ goal }: { goal: Goal }) {
         {goal.is_completed && (
           <div className="flex items-center gap-2 text-green-600">
             <Check className="h-4 w-4" />
-            <span className="text-sm font-medium">Completed!</span>
+            <span className="text-sm font-medium">Tamamlandı!</span>
           </div>
         )}
       </CardContent>

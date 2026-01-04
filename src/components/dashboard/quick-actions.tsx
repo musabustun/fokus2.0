@@ -6,36 +6,36 @@ import { PenLine, BookOpen, Target, ClipboardList, TrendingUp } from "lucide-rea
 
 const actions = [
   {
-    label: "Log Study",
+    label: "Çalışma Kaydet",
     href: "/study",
     icon: PenLine,
     color: "text-green-500",
     bgColor: "bg-green-500/10 hover:bg-green-500/20",
-    description: "Track study time"
+    description: "Çalışma süresini takip et"
   },
   {
-    label: "Add Exam",
+    label: "Sınav Ekle",
     href: "/exams/new",
     icon: ClipboardList,
     color: "text-blue-500",
     bgColor: "bg-blue-500/10 hover:bg-blue-500/20",
-    description: "Record results"
+    description: "Sonuçları kaydet"
   },
   {
-    label: "Add Book",
+    label: "Kitap Ekle",
     href: "/books",
     icon: BookOpen,
     color: "text-purple-500",
     bgColor: "bg-purple-500/10 hover:bg-purple-500/20",
-    description: "Track resources"
+    description: "Kaynakları takip et"
   },
   {
-    label: "Set Goal",
+    label: "Hedef Belirle",
     href: "/goals",
     icon: Target,
     color: "text-orange-500",
     bgColor: "bg-orange-500/10 hover:bg-orange-500/20",
-    description: "Create targets"
+    description: "Hedefler oluştur"
   },
 ]
 

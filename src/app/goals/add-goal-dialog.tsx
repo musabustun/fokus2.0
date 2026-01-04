@@ -32,69 +32,69 @@ export function AddGoalDialog() {
       <DialogTrigger asChild>
         <Button>
           <Plus className="mr-2 h-4 w-4" />
-          Add Goal
+          Hedef Ekle
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
             <Target className="h-5 w-5 text-primary" />
-            Create New Goal
+            Yeni Hedef Oluştur
           </DialogTitle>
           <DialogDescription>
-            Set a goal to track your progress and stay motivated.
+            İlerlemenizi takip etmek ve motive kalmak için bir hedef belirleyin.
           </DialogDescription>
         </DialogHeader>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-2">
-            <Label htmlFor="title">Goal Title</Label>
+            <Label htmlFor="title">Hedef Başlığı</Label>
             <Input
               id="title"
               name="title"
-              placeholder="e.g., Complete 50 Math problems"
+              placeholder="Örn: 50 Matematik sorusu çöz"
               required
             />
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="description">Description (optional)</Label>
+            <Label htmlFor="description">Açıklama (isteğe bağlı)</Label>
             <Input
               id="description"
               name="description"
-              placeholder="Details about your goal"
+              placeholder="Hedefinizle ilgili detaylar"
             />
           </div>
 
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="goalType">Type</Label>
+              <Label htmlFor="goalType">Tür</Label>
               <Select name="goalType" defaultValue="WEEKLY">
                 <SelectTrigger>
-                  <SelectValue placeholder="Select type" />
+                  <SelectValue placeholder="Tür seçin" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="DAILY">Daily</SelectItem>
-                  <SelectItem value="WEEKLY">Weekly</SelectItem>
-                  <SelectItem value="MONTHLY">Monthly</SelectItem>
-                  <SelectItem value="EXAM">Before Exam</SelectItem>
+                  <SelectItem value="DAILY">Günlük</SelectItem>
+                  <SelectItem value="WEEKLY">Haftalık</SelectItem>
+                  <SelectItem value="MONTHLY">Aylık</SelectItem>
+                  <SelectItem value="EXAM">Sınav Öncesi</SelectItem>
                 </SelectContent>
               </Select>
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="targetValue">Target (optional)</Label>
+              <Label htmlFor="targetValue">Hedef Değer (isteğe bağlı)</Label>
               <Input
                 id="targetValue"
                 name="targetValue"
                 type="number"
                 min="1"
-                placeholder="e.g., 50"
+                placeholder="Örn: 50"
               />
             </div>
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="dueDate">Due Date (optional)</Label>
+            <Label htmlFor="dueDate">Bitiş Tarihi (isteğe bağlı)</Label>
             <Input
               id="dueDate"
               name="dueDate"
@@ -104,10 +104,10 @@ export function AddGoalDialog() {
 
           <div className="flex justify-end gap-2 pt-2">
             <Button type="button" variant="outline" onClick={() => setIsOpen(false)}>
-              Cancel
+              İptal
             </Button>
             <Button type="submit" disabled={isSubmitting}>
-              {isSubmitting ? 'Creating...' : 'Create Goal'}
+              {isSubmitting ? 'Oluşturuluyor...' : 'Hedef Oluştur'}
             </Button>
           </div>
         </form>

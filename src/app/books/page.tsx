@@ -30,8 +30,8 @@ export default async function BooksPage() {
     <div className="container mx-auto py-10 px-4 space-y-8">
       <div className="flex items-center justify-between">
         <div>
-           <h2 className="text-3xl font-bold tracking-tight">Library</h2>
-           <p className="text-muted-foreground">Manage your study resources and track progress.</p>
+           <h2 className="text-3xl font-bold tracking-tight">Kütüphane</h2>
+           <p className="text-muted-foreground">Çalışma kaynaklarınızı yönetin ve ilerlemenizi takip edin.</p>
         </div>
         <AddBookDialog />
       </div>
@@ -39,7 +39,7 @@ export default async function BooksPage() {
       <div className="mt-8">
          {!books || books.length === 0 ? (
              <div className="text-center py-20 bg-card/30 rounded-lg text-muted-foreground">
-                 No books added yet. Start by adding one to your library.
+                 Henüz kitap eklenmedi. Kütüphanenize bir kitap ekleyerek başlayın.
              </div>
          ) : (
              <BookList books={books} />

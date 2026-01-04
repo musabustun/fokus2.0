@@ -23,7 +23,7 @@ function VerifyEmailContent() {
     if (result?.error) {
       setMessage(result.error)
     } else {
-      setMessage('Verification email sent! Check your inbox.')
+      setMessage('Doğrulama e-postası gönderildi! Gelen kutunuzu kontrol edin.')
     }
     
     setIsResending(false)
@@ -36,10 +36,10 @@ function VerifyEmailContent() {
           <Mail className="w-8 h-8 text-primary" />
         </div>
         <CardTitle className="text-2xl font-bold tracking-tight">
-          Check Your Email
+          E-postanızı Kontrol Edin
         </CardTitle>
         <CardDescription className="text-base">
-          We&apos;ve sent a verification link to
+          Doğrulama bağlantısını şu adrese gönderdik:
           <br />
           <span className="font-medium text-foreground">{email}</span>
         </CardDescription>
@@ -47,10 +47,10 @@ function VerifyEmailContent() {
       <CardContent className="space-y-6">
         <div className="bg-muted/50 rounded-lg p-4 space-y-2">
           <p className="text-sm text-muted-foreground">
-            Click the link in the email to verify your account and start tracking your YKS progress.
+            Hesabınızı doğrulamak ve YKS ilerlemenizi takip etmeye başlamak için e-postadaki bağlantıya tıklayın.
           </p>
           <p className="text-sm text-muted-foreground">
-            Didn&apos;t receive the email? Check your spam folder or click below to resend.
+            E-postayı almadınız mı? Gereksiz (spam) klasörünüzü kontrol edin veya tekrar göndermek için aşağıya tıklayın.
           </p>
         </div>
 
@@ -70,12 +70,12 @@ function VerifyEmailContent() {
             {isResending ? (
               <>
                 <RefreshCw className="mr-2 h-4 w-4 animate-spin" />
-                Sending...
+                Gönderiliyor...
               </>
             ) : (
               <>
                 <RefreshCw className="mr-2 h-4 w-4" />
-                Resend Verification Email
+                Doğrulama E-postasını Tekrar Gönder
               </>
             )}
           </Button>
@@ -83,7 +83,7 @@ function VerifyEmailContent() {
           <Link href="/login" className="block">
             <Button variant="ghost" className="w-full text-muted-foreground">
               <ArrowLeft className="mr-2 h-4 w-4" />
-              Back to Login
+              Giriş Ekranına Dön
             </Button>
           </Link>
         </div>
@@ -100,7 +100,7 @@ function LoadingFallback() {
           <Mail className="w-8 h-8 text-primary" />
         </div>
         <CardTitle className="text-2xl font-bold tracking-tight">
-          Loading...
+          Yükleniyor...
         </CardTitle>
       </CardHeader>
     </Card>

@@ -39,8 +39,8 @@ export default async function GoalsPage() {
             </Button>
           </Link>
           <div>
-            <h2 className="text-3xl font-bold tracking-tight">Goals</h2>
-            <p className="text-muted-foreground">Set and track your study goals.</p>
+            <h2 className="text-3xl font-bold tracking-tight">Hedefler</h2>
+            <p className="text-muted-foreground">Çalışma hedeflerinizi belirleyin ve takip edin.</p>
           </div>
         </div>
         <AddGoalDialog />
@@ -52,7 +52,7 @@ export default async function GoalsPage() {
           <CardHeader className="pb-2">
             <CardTitle className="text-sm font-medium text-muted-foreground flex items-center gap-2">
               <Target className="h-4 w-4" />
-              Active Goals
+              Aktif Hedefler
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -63,7 +63,7 @@ export default async function GoalsPage() {
           <CardHeader className="pb-2">
             <CardTitle className="text-sm font-medium text-muted-foreground flex items-center gap-2">
               <Check className="h-4 w-4" />
-              Completed
+              Tamamlananlar
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -74,7 +74,7 @@ export default async function GoalsPage() {
           <CardHeader className="pb-2">
             <CardTitle className="text-sm font-medium text-muted-foreground flex items-center gap-2">
               <TrendingUp className="h-4 w-4" />
-              Completion Rate
+              Tamamlama Oranı
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -89,13 +89,13 @@ export default async function GoalsPage() {
 
       {/* Active Goals */}
       <div className="space-y-4">
-        <h3 className="text-xl font-semibold">Active Goals</h3>
+        <h3 className="text-xl font-semibold">Aktif Hedefler</h3>
         {activeGoals.length === 0 ? (
           <Card className="bg-card/50">
             <CardContent className="py-12 text-center text-muted-foreground">
               <Target className="h-12 w-12 mx-auto mb-4 opacity-50" />
-              <p>No active goals yet.</p>
-              <p className="text-sm">Create a goal to start tracking your progress!</p>
+              <p>Henüz aktif hedef yok.</p>
+              <p className="text-sm">İlerlemenizi takip etmek için bir hedef oluşturun!</p>
             </CardContent>
           </Card>
         ) : (
@@ -110,7 +110,7 @@ export default async function GoalsPage() {
       {/* Completed Goals */}
       {completedGoals.length > 0 && (
         <div className="space-y-4">
-          <h3 className="text-xl font-semibold text-muted-foreground">Completed Goals</h3>
+          <h3 className="text-xl font-semibold text-muted-foreground">Tamamlanan Hedefler</h3>
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
             {completedGoals.map((goal) => (
               <GoalCard key={goal.id} goal={goal} />

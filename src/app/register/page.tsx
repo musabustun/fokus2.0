@@ -19,9 +19,9 @@ export default function RegisterPage() {
     <div className="flex min-h-screen items-center justify-center p-4 bg-muted/30">
       <Card className="w-full max-w-sm shadow-xl border-border/40 bg-card/50 backdrop-blur-sm">
         <CardHeader className="space-y-1 text-center">
-          <CardTitle className="text-2xl font-bold tracking-tight">Create an Account</CardTitle>
+          <CardTitle className="text-2xl font-bold tracking-tight">Hesap Oluştur</CardTitle>
           <CardDescription>
-            Enter your details to get started with YKS Tracker
+            YKS Tracker&apos;a başlamak için bilgilerinizi girin
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -32,27 +32,27 @@ export default function RegisterPage() {
               </div>
             )}
             <div className="space-y-2">
-              <Label htmlFor="fullName">Full Name</Label>
-              <Input id="fullName" name="fullName" placeholder="John Doe" required />
+              <Label htmlFor="fullName">Ad Soyad</Label>
+              <Input id="fullName" name="fullName" placeholder="Can Yılmaz" required />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="email">Email</Label>
-              <Input id="email" name="email" type="email" placeholder="m@example.com" required />
+              <Label htmlFor="email">E-posta</Label>
+              <Input id="email" name="email" type="email" placeholder="m@örnek.com" required />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="password">Password</Label>
+              <Label htmlFor="password">Şifre</Label>
               <Input id="password" name="password" type="password" required />
             </div>
             <Button type="submit" className="w-full bg-primary hover:bg-primary/90" disabled={isPending}>
-              {isPending ? 'Creating Account...' : 'Create Account'}
+              {isPending ? 'Hesap oluşturuluyor...' : 'Hesap Oluştur'}
             </Button>
           </form>
         </CardContent>
         <CardFooter className="flex flex-col gap-2 border-t pt-4">
           <div className="text-sm text-muted-foreground text-center">
-            Already have an account?{" "}
+            Zaten bir hesabın var mı?{" "}
             <Link href="/login" className="text-primary hover:underline font-medium">
-              Sign in
+              Giriş yap
             </Link>
           </div>
         </CardFooter>

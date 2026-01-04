@@ -10,16 +10,16 @@ import { addStudySession } from "@/app/study/actions"
 import { Clock, BookOpen, Plus } from "lucide-react"
 
 const SUBJECTS = [
-  { id: 'general', name: 'General Study' },
-  { id: 'turkish', name: 'Turkish' },
-  { id: 'math', name: 'Mathematics' },
-  { id: 'physics', name: 'Physics' },
-  { id: 'chemistry', name: 'Chemistry' },
-  { id: 'biology', name: 'Biology' },
-  { id: 'history', name: 'History' },
-  { id: 'geography', name: 'Geography' },
-  { id: 'philosophy', name: 'Philosophy' },
-  { id: 'literature', name: 'Literature' },
+  { id: 'general', name: 'Genel Çalışma' },
+  { id: 'turkish', name: 'Türkçe' },
+  { id: 'math', name: 'Matematik' },
+  { id: 'physics', name: 'Fizik' },
+  { id: 'chemistry', name: 'Kimya' },
+  { id: 'biology', name: 'Biyoloji' },
+  { id: 'history', name: 'Tarih' },
+  { id: 'geography', name: 'Coğrafya' },
+  { id: 'philosophy', name: 'Felsefe' },
+  { id: 'literature', name: 'Edebiyat' },
 ]
 
 interface QuickLogProps {
@@ -43,7 +43,7 @@ export function QuickLog({ subjectIdMap = {}, onSessionAdded }: QuickLogProps) {
     const totalMinutes = (parseInt(hours) || 0) * 60 + (parseInt(minutes) || 0)
     
     if (totalMinutes <= 0) {
-      setMessage("Please enter a valid duration")
+      setMessage("Lütfen geçerli bir süre girin")
       setIsSubmitting(false)
       return
     }
@@ -62,7 +62,7 @@ export function QuickLog({ subjectIdMap = {}, onSessionAdded }: QuickLogProps) {
     if (result?.error) {
       setMessage(result.error)
     } else {
-      setMessage("Session logged successfully!")
+      setMessage("Oturum başarıyla kaydedildi!")
       setHours("")
       setMinutes("")
       setSubject("")
@@ -78,14 +78,14 @@ export function QuickLog({ subjectIdMap = {}, onSessionAdded }: QuickLogProps) {
       <CardHeader className="pb-3">
         <CardTitle className="flex items-center gap-2 text-lg">
           <Clock className="h-5 w-5 text-primary" />
-          Quick Log Study Session
+          Hızlı Çalışma Kaydı
         </CardTitle>
       </CardHeader>
       <CardContent>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="hours">Hours</Label>
+              <Label htmlFor="hours">Saat</Label>
               <Input
                 id="hours"
                 type="number"
@@ -97,7 +97,7 @@ export function QuickLog({ subjectIdMap = {}, onSessionAdded }: QuickLogProps) {
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="minutes">Minutes</Label>
+              <Label htmlFor="minutes">Dakika</Label>
               <Input
                 id="minutes"
                 type="number"
@@ -111,10 +111,10 @@ export function QuickLog({ subjectIdMap = {}, onSessionAdded }: QuickLogProps) {
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="subject">Subject (optional)</Label>
+            <Label htmlFor="subject">Ders (isteğe bağlı)</Label>
             <Select value={subject} onValueChange={setSubject}>
               <SelectTrigger>
-                <SelectValue placeholder="Select subject" />
+                <SelectValue placeholder="Ders seçin" />
               </SelectTrigger>
               <SelectContent>
                 {SUBJECTS.map((s) => (
@@ -130,26 +130,26 @@ export function QuickLog({ subjectIdMap = {}, onSessionAdded }: QuickLogProps) {
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="notes">Notes (optional)</Label>
+            <Label htmlFor="notes">Notlar (isteğe bağlı)</Label>
             <Input
               id="notes"
-              placeholder="What did you study?"
+              placeholder="Ne çalıştınız?"
               value={notes}
               onChange={(e) => setNotes(e.target.value)}
             />
           </div>
 
           {message && (
-            <div className={`text-sm p-2 rounded ${message.includes('error') || message.includes('Error') || message.includes('Please') ? 'bg-destructive/15 text-destructive' : 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400'}`}>
+            <div className={`text-sm p-2 rounded ${message.includes('error') || message.includes('Error') || message.includes('Lütfen') ? 'bg-destructive/15 text-destructive' : 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400'}`}>
               {message}
             </div>
           )}
 
           <Button type="submit" className="w-full" disabled={isSubmitting}>
-            {isSubmitting ? 'Logging...' : (
+            {isSubmitting ? 'Kaydediliyor...' : (
               <>
                 <Plus className="mr-2 h-4 w-4" />
-                Log Session
+                Oturumu Kaydet
               </>
             )}
           </Button>

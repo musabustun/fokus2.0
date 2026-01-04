@@ -13,8 +13,8 @@ export function SubjectRadar({ data }: { data: any[] }) {
   return (
     <Card className="col-span-1 md:col-span-2 lg:col-span-3 bg-card/50 backdrop-blur-sm shadow-sm">
       <CardHeader>
-        <CardTitle>Subject Performance</CardTitle>
-        <CardDescription>Strengths and Weaknesses breakdown.</CardDescription>
+        <CardTitle>Konu Performansı</CardTitle>
+        <CardDescription>Güçlü ve zayıf yönlerin analizi.</CardDescription>
       </CardHeader>
       <CardContent>
         <div className="h-[300px] w-full">
@@ -24,7 +24,7 @@ export function SubjectRadar({ data }: { data: any[] }) {
                 <PolarAngleAxis dataKey="subject" className="text-xs font-bold" />
                 <PolarRadiusAxis angle={30} domain={[0, 100]} tick={false} axisLine={false} />
                 <Radar
-                    name="Performance %"
+                    name="Performans %"
                     dataKey="score"
                     stroke="var(--chart-3)"
                     fill="var(--chart-3)"
