@@ -118,7 +118,7 @@ export async function updateStudyField(studyField: string) {
   const { data: { user } } = await supabase.auth.getUser()
 
   if (!user) {
-    return { error: 'Not authenticated' }
+    throw new Error('Not authenticated')
   }
 
   const { error } = await supabase
@@ -130,7 +130,7 @@ export async function updateStudyField(studyField: string) {
     })
 
   if (error) {
-    return { error: error.message }
+    throw new Error(error.message)
   }
 
   revalidatePath('/', 'layout')
@@ -213,21 +213,21 @@ export async function saveExam(previousState: any, formData: FormData) {
   const resultsToInsert = []
   
   const nameMap: Record<string, string> = {
-      'TURKISH': 'Turkish',
-      'MATH': 'Mathematics',
-      'PHYSICS': 'Physics',
-      'CHEMISTRY': 'Chemistry',
-      'BIOLOGY': 'Biology',
-      'HISTORY': 'History',
-      'GEOGRAPHY': 'Geography',
-      'PHILOSOPHY': 'Philosophy',
-      'RELIGION': 'Religion',
-      'LITERATURE': 'Literature',
-      'HISTORY_1': 'History-1',
-      'HISTORY_2': 'History-2',
-      'GEOGRAPHY_1': 'Geography-1',
-      'GEOGRAPHY_2': 'Geography-2',
-      'PHILOSOPHY_GRP': 'Philosophy Grp'
+      'TURKISH': 'Türkçe',
+      'MATH': 'Matematik',
+      'PHYSICS': 'Fizik',
+      'CHEMISTRY': 'Kimya',
+      'BIOLOGY': 'Biyoloji',
+      'HISTORY': 'Tarih',
+      'GEOGRAPHY': 'Coğrafya',
+      'PHILOSOPHY': 'Felsefe',
+      'RELIGION': 'Din Kültürü',
+      'LITERATURE': 'Edebiyat',
+      'HISTORY_1': 'Tarih-1',
+      'HISTORY_2': 'Tarih-2',
+      'GEOGRAPHY_1': 'Coğrafya-1',
+      'GEOGRAPHY_2': 'Coğrafya-2',
+      'PHILOSOPHY_GRP': 'Felsefe Grubu'
   }
   
   for (const [subjectKey, score] of Object.entries(scores) as any) {

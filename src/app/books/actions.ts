@@ -26,16 +26,16 @@ export async function addBook(previousState: any, formData: FormData) {
   // Find or Create Subject ID (Simplified logic, mimicking saveExam)
    // Re-mapping frontend IDs to likely DB names:
    const nameMap: Record<string, string> = {
-    'TURKISH': 'Turkish',
-    'MATH': 'Mathematics',
-    'PHYSICS': 'Physics',
-    'CHEMISTRY': 'Chemistry',
-    'BIOLOGY': 'Biology',
-    'HISTORY': 'History',
-    'GEOGRAPHY': 'Geography',
-    'PHILOSOPHY': 'Philosophy',
-    'RELIGION': 'Religion',
-    'LITERATURE': 'Literature',
+    'TURKISH': 'Türkçe',
+    'MATH': 'Matematik',
+    'PHYSICS': 'Fizik',
+    'CHEMISTRY': 'Kimya',
+    'BIOLOGY': 'Biyoloji',
+    'HISTORY': 'Tarih',
+    'GEOGRAPHY': 'Coğrafya',
+    'PHILOSOPHY': 'Felsefe',
+    'RELIGION': 'Din Kültürü',
+    'LITERATURE': 'Edebiyat',
 }
   const dbName = nameMap[subjectName] || subjectName
 
