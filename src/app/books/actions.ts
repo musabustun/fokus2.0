@@ -110,13 +110,46 @@ export async function deleteBook(bookId: string) {
         { cookies: { getAll: () => cookieStore.getAll(), setAll: () => {} } }
     )
 
-    const { error } = await supabase
+    const { data: { user } } = await supabase.auth.getUser()
+    if (!user) return { error: 'Not authenticated' }
+
+    // First get all unit IDs for this book to delete their tests
+    const { data: units } = await supabase
+        .from('book_units')
+        .select('id')
+        .eq('book_id', bookId)
+
+    // Delete all tests associated with the book's units
+    if (units && units.length > 0) {
+        const unitIds = units.map(u => u.id)
+        const { error: testsError } = await supabase
+            .from('book_tests')
+            .delete()
+            .in('unit_id', unitIds)
+        
+        if (testsError) return { error: testsError.message }
+    }
+
+    // Delete all units for this book
+    const { error: unitsError } = await supabase
+        .from('book_units')
+        .delete()
+        .eq('book_id', bookId)
+
+    if (unitsError) return { error: unitsError.message }
+
+    // Finally delete the book itself
+    const { error: bookError } = await supabase
         .from('books')
         .delete()
         .eq('id', bookId)
+        .eq('user_id', user.id) // Ensure user owns this book
 
-    if (error) throw new Error(error.message)
+    if (bookError) return { error: bookError.message }
+    
     revalidatePath('/books')
+    revalidatePath('/')
+    return { success: true }
 }
 
 // Create book units when a book is added with topics
