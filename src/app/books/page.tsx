@@ -31,7 +31,7 @@ export default async function BooksPage() {
 
   const { data: books } = await supabase
     .from('books')
-    .select('*, subjects(name)')
+    .select('*, subjects(name), book_units(*, book_tests(*))')
     .order('created_at', { ascending: false })
 
   return (

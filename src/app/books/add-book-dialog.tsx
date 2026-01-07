@@ -172,6 +172,7 @@ export function AddBookDialog({ userField }: { userField?: string }) {
                             </div>
                             {/* Hidden input for totalUnits if topics are used */}
                             <input type="hidden" name="totalUnits" value={selectedTopics.length} />
+                            <input type="hidden" name="topics" value={JSON.stringify(selectedTopics)} />
                         </div>
                     )}
 
