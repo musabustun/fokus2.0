@@ -5,6 +5,7 @@ import { ThemeProvider } from "@/components/theme-provider";
 import { Sidebar } from "@/components/navigation/sidebar";
 import { MobileNav } from "@/components/navigation/mobile-nav";
 import { RegisterServiceWorker } from "@/components/register-sw";
+import { PwaInstallPrompt } from "@/components/pwa-install-prompt";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -112,6 +113,7 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <RegisterServiceWorker />
+          <PwaInstallPrompt />
           <Sidebar />
           <main className="lg:pl-64 pb-20 lg:pb-0 min-h-screen">
             {children}
