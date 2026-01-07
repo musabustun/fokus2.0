@@ -29,7 +29,7 @@ export function SubjectRadar({ data }: { data: any[] }) {
                     fillOpacity={0.4}
                 />
                 <Tooltip 
-                  formatter={(value: number) => [`%${value}`, 'Başarı Oranı']}
+                  formatter={(value) => [`%${value}`, 'Başarı Oranı']}
                 />
             </RadarChart>
             </ResponsiveContainer>
