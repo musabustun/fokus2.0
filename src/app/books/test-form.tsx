@@ -22,6 +22,7 @@ interface TestFormProps {
 
 export function TestForm({ unitId, testCount, test, onClose }: TestFormProps) {
     const [loading, setLoading] = useState(false)
+    const [confirmDelete, setConfirmDelete] = useState(false)
     // Auto-generate default name for new tests
     const defaultName = test?.test_name || (test ? '' : `Test ${testCount + 1}`)
     const [testName, setTestName] = useState(defaultName)
@@ -62,13 +63,14 @@ export function TestForm({ unitId, testCount, test, onClose }: TestFormProps) {
     }
 
     const handleDelete = async () => {
-        if (!test || !confirm('Bu testi silmek istediğinizden emin misiniz?')) return
+        if (!test) return
         setLoading(true)
         try {
             await deleteTest(test.id)
             onClose()
         } catch (e) {
             console.error('Error deleting test:', e)
+            setConfirmDelete(false)
         } finally {
             setLoading(false)
         }
@@ -138,16 +140,39 @@ export function TestForm({ unitId, testCount, test, onClose }: TestFormProps) {
 
             <div className="flex justify-between items-center pt-2">
                 {test && (
-                    <Button
-                        type="button"
-                        variant="ghost"
-                        size="sm"
-                        className="text-destructive hover:text-destructive"
-                        onClick={handleDelete}
-                        disabled={loading}
-                    >
-                        <Trash2 className="h-4 w-4 mr-1" /> Sil
-                    </Button>
+                    confirmDelete ? (
+                        <div className="flex items-center gap-2">
+                            <Button
+                                type="button"
+                                variant="outline"
+                                size="sm"
+                                onClick={() => setConfirmDelete(false)}
+                                disabled={loading}
+                            >
+                                İptal
+                            </Button>
+                            <Button
+                                type="button"
+                                variant="destructive"
+                                size="sm"
+                                onClick={handleDelete}
+                                disabled={loading}
+                            >
+                                <Trash2 className="h-4 w-4 mr-1" /> Sil
+                            </Button>
+                        </div>
+                    ) : (
+                        <Button
+                            type="button"
+                            variant="ghost"
+                            size="sm"
+                            className="text-destructive hover:text-destructive"
+                            onClick={() => setConfirmDelete(true)}
+                            disabled={loading}
+                        >
+                            <Trash2 className="h-4 w-4 mr-1" /> Sil
+                        </Button>
+                    )
                 )}
                 <div className="flex gap-2 ml-auto">
                     <Button type="button" variant="outline" size="sm" onClick={onClose} disabled={loading}>

@@ -6,7 +6,7 @@ import { UnitRow } from "./unit-row"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Progress } from "@/components/ui/progress"
-import { Trash2, ChevronDown, ChevronUp, BookOpen } from "lucide-react"
+import { Trash2, ChevronDown, ChevronUp, BookOpen, X, Check } from "lucide-react"
 
 interface BookTest {
     id: string
@@ -46,6 +46,7 @@ export function BookList({ books }: { books: Book[] }) {
 function BookCard({ book }: { book: Book }) {
     const [loading, setLoading] = useState(false)
     const [expanded, setExpanded] = useState(false)
+    const [confirmDelete, setConfirmDelete] = useState(false)
 
     // Sort units by order
     const units = (book.book_units || []).sort((a, b) => a.unit_order - b.unit_order)
@@ -66,7 +67,6 @@ function BookCard({ book }: { book: Book }) {
     const wrongAnswers = allTests.reduce((sum, t) => sum + t.wrong_answers, 0)
 
     const handleDelete = async () => {
-        if (!confirm("Bu kitabı silmek istediğinizden emin misiniz?")) return
         setLoading(true)
         try {
             await deleteBook(book.id)
@@ -74,6 +74,7 @@ function BookCard({ book }: { book: Book }) {
             console.error('Delete error:', error)
             alert('Kitap silinirken bir hata oluştu.')
             setLoading(false)
+            setConfirmDelete(false)
         }
     }
 
@@ -92,13 +93,32 @@ function BookCard({ book }: { book: Book }) {
                             </p>
                         </div>
                     </div>
-                    <button 
-                        onClick={handleDelete} 
-                        disabled={loading}
-                        className="p-2 text-muted-foreground hover:text-destructive opacity-0 group-hover:opacity-100 transition-opacity"
-                    >
-                        <Trash2 className="h-4 w-4" />
-                    </button>
+                    {confirmDelete ? (
+                        <div className="flex items-center gap-1">
+                            <button
+                                onClick={() => setConfirmDelete(false)}
+                                disabled={loading}
+                                className="p-1.5 rounded-md text-muted-foreground hover:bg-muted transition-colors"
+                            >
+                                <X className="h-4 w-4" />
+                            </button>
+                            <button
+                                onClick={handleDelete}
+                                disabled={loading}
+                                className="p-1.5 rounded-md bg-destructive text-destructive-foreground hover:bg-destructive/90 transition-colors"
+                            >
+                                <Check className="h-4 w-4" />
+                            </button>
+                        </div>
+                    ) : (
+                        <button 
+                            onClick={() => setConfirmDelete(true)} 
+                            disabled={loading}
+                            className="p-2 text-muted-foreground hover:text-destructive opacity-0 group-hover:opacity-100 transition-opacity"
+                        >
+                            <Trash2 className="h-4 w-4" />
+                        </button>
+                    )}
                 </div>
             </CardHeader>
             <CardContent className="space-y-4">
