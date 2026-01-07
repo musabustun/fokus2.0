@@ -188,18 +188,6 @@ export async function saveExam(previousState: any, formData: FormData) {
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) return { error: 'Not authenticated' }
 
-  const examType = formData.get('examType') as string
-  const scoresRaw = formData.get('scores') as string
-  
-  let scores = {};
-  if (scoresRaw) {
-    try {
-        scores = JSON.parse(scoresRaw)
-    } catch (e) {
-        return { error: "Invalid scores data" }
-    }
-  }
-
   // 1. Create Exam
   const { data: exam, error: examError } = await supabase
     .from('exams')
@@ -236,10 +224,18 @@ export async function saveExam(previousState: any, formData: FormData) {
       const dbName = nameMap[subjectKey] || subjectKey
       
       // Get or Create Subject
-      let { data: subject } = await supabase.from('subjects').select('id').eq('name', dbName).eq('type', examType).single()
+      let { data: subject, error: fetchError } = await supabase.from('subjects').select('id').eq('name', dbName).eq('type', examType).single()
       
+      if (fetchError && fetchError.code !== 'PGRST116') { // PGRST116 is "not found"
+          return { error: `Error fetching subject ${dbName}: ${fetchError.message}` }
+      }
+
       if (!subject) {
-          const { data: newSubject } = await supabase.from('subjects').insert({ name: dbName, type: examType }).select().single()
+          const { data: newSubject, error: createError } = await supabase.from('subjects').insert({ name: dbName, type: examType }).select().single()
+          
+          if (createError) {
+              return { error: `Error creating subject ${dbName}: ${createError.message}` }
+          }
           subject = newSubject
       }
       
@@ -264,7 +260,11 @@ export async function saveExam(previousState: any, formData: FormData) {
       totalNet += (r.correct_count - (r.incorrect_count * 0.25))
   })
   
-  await supabase.from('exams').update({ total_net: totalNet }).eq('id', exam.id)
+  const { error: updateError } = await supabase.from('exams').update({ total_net: totalNet }).eq('id', exam.id)
+  
+  if (updateError) {
+      return { error: `Error updating exam total: ${updateError.message}` }
+  }
 
   revalidatePath('/exams')
   revalidatePath('/')
