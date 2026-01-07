@@ -4,37 +4,21 @@ import { useState, useEffect } from 'react';
 import { X, Download } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { usePwaInstall } from '@/hooks/use-pwa-install';
 
 export function PwaInstallPrompt() {
-  const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
+  const { isInstallable, install } = usePwaInstall();
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
-    const handler = (e: any) => {
-      e.preventDefault();
-      setDeferredPrompt(e);
-      setIsVisible(true);
-    };
-
-    window.addEventListener('beforeinstallprompt', handler);
-
-    return () => {
-      window.removeEventListener('beforeinstallprompt', handler);
-    };
-  }, []);
-
-  const handleInstallClick = async () => {
-    if (!deferredPrompt) return;
-
-    deferredPrompt.prompt();
-
-    const { outcome } = await deferredPrompt.userChoice;
-    
-    if (outcome === 'accepted') {
+    if (isInstallable) {
+      // Show prompt after a small delay
+      const timer = setTimeout(() => setIsVisible(true), 3000);
+      return () => clearTimeout(timer);
+    } else {
       setIsVisible(false);
-      setDeferredPrompt(null);
     }
-  };
+  }, [isInstallable]);
 
   const handleDismiss = () => {
     setIsVisible(false);
@@ -61,7 +45,7 @@ export function PwaInstallPrompt() {
         </CardHeader>
         <CardContent>
           <div className="flex gap-2">
-            <Button onClick={handleInstallClick} className="w-full">
+            <Button onClick={install} className="w-full">
               Yükle
             </Button>
             <Button variant="outline" onClick={handleDismiss} className="w-full">

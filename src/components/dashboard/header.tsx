@@ -1,5 +1,6 @@
 
 import { ModeToggle } from "@/components/mode-toggle"
+import { PwaInstallButton } from "@/components/pwa-install-button"
 
 export function DashboardHeader() {
   return (
@@ -12,6 +13,7 @@ export function DashboardHeader() {
         <span className="text-sm text-muted-foreground hidden md:block">
             {new Date().toLocaleDateString('tr-TR', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
         </span>
+        <PwaInstallButton />
         <ModeToggle />
       </div>
     </div>
