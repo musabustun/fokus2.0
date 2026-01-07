@@ -1,9 +1,10 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Sidebar } from "@/components/navigation/sidebar";
 import { MobileNav } from "@/components/navigation/mobile-nav";
+import { RegisterServiceWorker } from "@/components/register-sw";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -73,12 +74,25 @@ export const metadata: Metadata = {
   icons: {
     icon: '/favicon.ico',
     shortcut: '/favicon.ico',
-    apple: '/apple-icon.png',
+    apple: '/appimages/ios/180.png',
     other: {
       rel: 'apple-touch-icon-precomposed',
-      url: '/apple-touch-icon-precomposed.png',
+      url: '/appimages/ios/180.png',
     },
   },
+  manifest: '/manifest.json',
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: 'black-translucent',
+    title: 'Fokus',
+  },
+};
+
+export const viewport: Viewport = {
+  themeColor: '#0a0a0a',
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 1,
 };
 
 export default function RootLayout({
@@ -97,6 +111,7 @@ export default function RootLayout({
           enableSystem={false}
           disableTransitionOnChange
         >
+          <RegisterServiceWorker />
           <Sidebar />
           <main className="lg:pl-64 pb-20 lg:pb-0 min-h-screen">
             {children}
