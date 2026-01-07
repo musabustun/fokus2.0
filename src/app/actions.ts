@@ -247,8 +247,8 @@ export async function saveExam(previousState: any, formData: FormData) {
          resultsToInsert.push({
              exam_id: exam.id,
              subject_id: subject.id,
-             correct_count: score.correct,
-             incorrect_count: score.incorrect
+             correct_count: score.correct || 0,
+             incorrect_count: score.incorrect || 0
          })
       }
   }

@@ -45,13 +45,16 @@ export function ExamForm() {
 
   const handleScoreChange = (subjectId: string, field: 'correct' | 'incorrect', value: string) => {
     const numValue = parseInt(value) || 0
-    setScores(prev => ({
-      ...prev,
-      [subjectId]: {
-        ...prev[subjectId],
-        [field]: numValue
+    setScores(prev => {
+      const current = prev[subjectId] || { correct: 0, incorrect: 0 }
+      return {
+        ...prev,
+        [subjectId]: {
+          ...current,
+          [field]: numValue
+        }
       }
-    }))
+    })
   }
 
   const calculateNet = (correct: number, incorrect: number) => {
