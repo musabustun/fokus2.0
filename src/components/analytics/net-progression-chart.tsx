@@ -76,8 +76,16 @@ export function NetProgressionChart({ data }: { data: any[] }) {
                 <XAxis dataKey="date" className="text-xs text-muted-foreground" />
                 <YAxis className="text-xs text-muted-foreground" />
                 <Tooltip 
-                    contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 4px 12px rgba(0,0,0,0.1)' }}
+                    contentStyle={{ 
+                      borderRadius: '8px', 
+                      border: 'none', 
+                      boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
+                      backgroundColor: 'var(--background)',
+                      color: 'var(--foreground)'
+                    }}
                     cursor={{ stroke: 'var(--primary)', strokeWidth: 1 }}
+                    formatter={(value: number | undefined) => [`${value?.toFixed(2) ?? '—'} Net`, selectedType]}
+                    labelFormatter={(label) => `Tarih: ${label}`}
                 />
                 <Line 
                     type="monotone" 
