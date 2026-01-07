@@ -188,6 +188,18 @@ export async function saveExam(previousState: any, formData: FormData) {
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) return { error: 'Not authenticated' }
 
+  const examType = formData.get('examType') as string
+  const scoresRaw = formData.get('scores') as string
+  
+  let scores = {};
+  if (scoresRaw) {
+    try {
+        scores = JSON.parse(scoresRaw)
+    } catch (e) {
+        return { error: "Invalid scores data" }
+    }
+  }
+
   // 1. Create Exam
   const { data: exam, error: examError } = await supabase
     .from('exams')
