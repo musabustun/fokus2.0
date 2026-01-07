@@ -68,7 +68,13 @@ function BookCard({ book }: { book: Book }) {
     const handleDelete = async () => {
         if (!confirm("Bu kitabı silmek istediğinizden emin misiniz?")) return
         setLoading(true)
-        await deleteBook(book.id)
+        try {
+            await deleteBook(book.id)
+        } catch (error) {
+            console.error('Delete error:', error)
+            alert('Kitap silinirken bir hata oluştu.')
+            setLoading(false)
+        }
     }
 
     return (

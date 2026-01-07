@@ -128,6 +128,7 @@ export function UnitRow({ unit }: UnitRowProps) {
                     {showTestForm ? (
                         <TestForm
                             unitId={unit.id}
+                            testCount={tests.length}
                             test={editingTest || undefined}
                             onClose={() => { setShowTestForm(false); setEditingTest(null); }}
                         />

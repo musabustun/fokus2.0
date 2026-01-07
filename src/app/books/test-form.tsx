@@ -9,6 +9,7 @@ import { Trash2, X, Check } from "lucide-react"
 
 interface TestFormProps {
     unitId: string
+    testCount: number
     test?: {
         id: string
         test_name: string | null
@@ -19,9 +20,11 @@ interface TestFormProps {
     onClose: () => void
 }
 
-export function TestForm({ unitId, test, onClose }: TestFormProps) {
+export function TestForm({ unitId, testCount, test, onClose }: TestFormProps) {
     const [loading, setLoading] = useState(false)
-    const [testName, setTestName] = useState(test?.test_name || '')
+    // Auto-generate default name for new tests
+    const defaultName = test?.test_name || (test ? '' : `Test ${testCount + 1}`)
+    const [testName, setTestName] = useState(defaultName)
     const [totalQuestions, setTotalQuestions] = useState(test?.total_questions?.toString() || '')
     const [correctAnswers, setCorrectAnswers] = useState(test?.correct_answers?.toString() || '')
     const [wrongAnswers, setWrongAnswers] = useState(test?.wrong_answers?.toString() || '')
