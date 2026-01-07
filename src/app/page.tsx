@@ -68,23 +68,52 @@ export default async function Home() {
       AYT: e.type === 'AYT' ? e.total_net : null,
   })) || []
 
-  // Process Radar Data
-  const subjectStats: Record<string, { totalNet: number, count: number }> = {}
+  // Process Radar Data - Calculate percentage (net / total_questions * 100)
+  // Total questions per subject for TYT and AYT exams
+  const subjectMaxQuestions: Record<string, number> = {
+    'Türkçe': 40,
+    'Matematik': 40,
+    'Fizik': 14, // AYT max (TYT is 7)
+    'Kimya': 13, // AYT max (TYT is 7)
+    'Biyoloji': 13, // AYT max (TYT is 6)
+    'Tarih': 10, // AYT Tarih-1 max (TYT is 5)
+    'Tarih-1': 10,
+    'Tarih-2': 11,
+    'Coğrafya': 11, // AYT Coğrafya-2 max (TYT is 5)
+    'Coğrafya-1': 6,
+    'Coğrafya-2': 11,
+    'Felsefe': 5,
+    'Felsefe Grubu': 12,
+    'Din Kültürü': 6,
+    'Edebiyat': 24,
+  }
+
+  const subjectStats: Record<string, { totalNet: number, totalMax: number, count: number }> = {}
   
   results?.forEach(r => {
       const subjectName = r.subjects?.name || 'Bilinmiyor'
-      if (!subjectStats[subjectName]) subjectStats[subjectName] = { totalNet: 0, count: 0 }
+      const maxQuestions = subjectMaxQuestions[subjectName] || 40
+      
+      if (!subjectStats[subjectName]) {
+        subjectStats[subjectName] = { totalNet: 0, totalMax: 0, count: 0 }
+      }
       
       const net = r.correct_count - (r.incorrect_count * 0.25)
       subjectStats[subjectName].totalNet += net
+      subjectStats[subjectName].totalMax += maxQuestions
       subjectStats[subjectName].count += 1
   })
 
-  const radarData = Object.entries(subjectStats).map(([subject, stats]) => ({
-      subject,
-      score: Math.round(stats.totalNet / stats.count), // Average Net
-      fullMark: 40 // Placeholder, we don't track max score per subject broadly yet
-  }))
+  const radarData = Object.entries(subjectStats).map(([subject, stats]) => {
+      const avgNet = stats.totalNet / stats.count
+      const maxQuestions = subjectMaxQuestions[subject] || 40
+      const percentage = Math.round((avgNet / maxQuestions) * 100)
+      return {
+          subject,
+          score: Math.max(0, Math.min(100, percentage)), // Clamp between 0-100
+          fullMark: 100
+      }
+  })
 
   return (
     <main className="flex min-h-screen flex-col p-6 md:p-10 bg-muted/20 space-y-6">
