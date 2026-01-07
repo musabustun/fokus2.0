@@ -19,7 +19,7 @@ export default function LoginPage() {
     <div className="flex min-h-screen items-center justify-center p-4 bg-muted/30">
       <Card className="w-full max-w-sm shadow-xl border-border/40 bg-card/50 backdrop-blur-sm">
         <CardHeader className="space-y-1 text-center">
-          <CardTitle className="text-2xl font-bold tracking-tight">YKS Tracker</CardTitle>
+          <CardTitle className="text-2xl font-bold tracking-tight">Fokus</CardTitle>
           <CardDescription>
             Paneline giriş yapmak için e-posta adresini gir
           </CardDescription>

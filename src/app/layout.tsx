@@ -22,8 +22,8 @@ export const metadata: Metadata = {
   },
   description: "YKS (TYT, AYT) hazırlık sürecinizi profesyonelce yönetin. Konu takibi, deneme sonuçları ve çalışma istatistikleri ile hedefinize odaklanın.",
   keywords: [
-    "YKS Takip", "TYT Konu Takibi", "AYT Net Takibi", "YKS Deneme Takibi", 
-    "Sınav Hazırlık", "Ders Çalışma Programı", "YKS Sayacı", "Üniversite Hazırlık"
+    "Fokus", "YKS Koçu", "Dijital Koç", "YKS Takip", "TYT Konu Takibi", "AYT Net Takibi", 
+    "YKS Deneme Takibi", "Sınav Hazırlık", "Ders Çalışma Programı", "YKS Sayacı", "Üniversite Hazırlık"
   ],
   authors: [{ name: "Fokus Team" }],
   creator: "Fokus",
@@ -33,7 +33,7 @@ export const metadata: Metadata = {
     address: false,
     telephone: false,
   },
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3004'),
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'),
   alternates: {
     canonical: '/',
   },
@@ -47,7 +47,7 @@ export const metadata: Metadata = {
         url: '/og-image.png',
         width: 1200,
         height: 630,
-        alt: 'Fokus YKS Tracker',
+        alt: 'Fokus YKS Hazırlık Platformu',
       },
     ],
     locale: 'tr_TR',
@@ -73,7 +73,11 @@ export const metadata: Metadata = {
   icons: {
     icon: '/favicon.ico',
     shortcut: '/favicon.ico',
-    apple: '/favicon.ico', // Ideally this should be a larger png, but sticking to existing for now
+    apple: '/apple-icon.png',
+    other: {
+      rel: 'apple-touch-icon-precomposed',
+      url: '/apple-touch-icon-precomposed.png',
+    },
   },
 };
 

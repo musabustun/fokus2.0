@@ -21,7 +21,7 @@ export default function RegisterPage() {
         <CardHeader className="space-y-1 text-center">
           <CardTitle className="text-2xl font-bold tracking-tight">Hesap Oluştur</CardTitle>
           <CardDescription>
-            YKS Tracker&apos;a başlamak için bilgilerinizi girin
+            Fokus&apos;a başlamak için bilgilerinizi girin
           </CardDescription>
         </CardHeader>
         <CardContent>

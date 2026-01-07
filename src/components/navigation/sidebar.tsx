@@ -45,7 +45,7 @@ export function Sidebar() {
             <div className="h-8 w-8 rounded-lg bg-gradient-to-br from-primary to-primary/60 flex items-center justify-center">
               <BarChart3 className="h-5 w-5 text-primary-foreground" />
             </div>
-            <span className="text-xl font-bold tracking-tight">YKS Tracker</span>
+            <span className="text-xl font-bold tracking-tight">Fokus</span>
           </Link>
         </div>
 

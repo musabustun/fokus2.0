@@ -49,7 +49,7 @@ export default function OnboardingPage() {
     <div className="min-h-screen flex items-center justify-center p-6 bg-muted/30">
       <div className="max-w-4xl w-full space-y-8">
         <div className="text-center space-y-2">
-          <h1 className="text-3xl font-bold tracking-tight">YKS Tracker&apos;a Hoş Geldiniz</h1>
+          <h1 className="text-3xl font-bold tracking-tight">Fokus&apos;a Hoş Geldiniz</h1>
           <p className="text-muted-foreground text-lg">Kontrol panelinizi özelleştirmek için çalışma alanınızı seçin.</p>
           {error && (
             <div className="mt-4 p-3 bg-destructive/10 border border-destructive/20 rounded-md">

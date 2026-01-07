@@ -47,7 +47,7 @@ function VerifyEmailContent() {
       <CardContent className="space-y-6">
         <div className="bg-muted/50 rounded-lg p-4 space-y-2">
           <p className="text-sm text-muted-foreground">
-            Hesabınızı doğrulamak ve YKS ilerlemenizi takip etmeye başlamak için e-postadaki bağlantıya tıklayın.
+            Hesabınızı doğrulamak ve Fokus ile ilerlemenizi takip etmeye başlamak için e-postadaki bağlantıya tıklayın.
           </p>
           <p className="text-sm text-muted-foreground">
             E-postayı almadınız mı? Gereksiz (spam) klasörünüzü kontrol edin veya tekrar göndermek için aşağıya tıklayın.
