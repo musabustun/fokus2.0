@@ -1,13 +1,12 @@
 
-import { createClient } from "@/lib/supabase/client" // Wait, we should use server component pattern if possible.
-// Actually, for page.tsx, we can use createServerClient if we want server rendering.
 import { createServerClient } from '@supabase/ssr'
 import { cookies } from 'next/headers'
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent } from "@/components/ui/card"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Plus } from "lucide-react"
+import { ExamActions } from "@/components/exams/exam-actions"
 
 export default async function ExamsPage() {
   const cookieStore = await cookies()
@@ -77,9 +76,9 @@ export default async function ExamsPage() {
                                     {exam.type}
                                 </span>
                             </TableCell>
-                            <TableCell className="font-mono font-medium">{exam.total_net}</TableCell>
-                            <TableCell className="text-right">
-                                <Button variant="ghost" size="sm">Görüntüle</Button>
+                            <TableCell className="font-mono font-medium">{exam.total_net?.toFixed(2) || '0.00'}</TableCell>
+                            <TableCell>
+                                <ExamActions examId={exam.id} />
                             </TableCell>
                         </TableRow>
                     ))}

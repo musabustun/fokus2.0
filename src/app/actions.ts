@@ -191,7 +191,7 @@ export async function saveExam(previousState: any, formData: FormData) {
   const examType = formData.get('examType') as string
   const scoresRaw = formData.get('scores') as string
   
-  let scores = {};
+  let scores: Record<string, { correct: number; incorrect: number }> = {};
   if (scoresRaw) {
     try {
         scores = JSON.parse(scoresRaw)
@@ -200,18 +200,6 @@ export async function saveExam(previousState: any, formData: FormData) {
     }
   }
 
-  // 1. Create Exam
-  const { data: exam, error: examError } = await supabase
-    .from('exams')
-    .insert({ user_id: user.id, type: examType, date: new Date().toISOString() })
-    .select()
-    .single()
-
-  if (examError) return { error: examError.message }
-
-  // 2. Process Results
-  const resultsToInsert = []
-  
   const nameMap: Record<string, string> = {
       'TURKISH': 'Türkçe',
       'MATH': 'Matematik',
@@ -229,21 +217,57 @@ export async function saveExam(previousState: any, formData: FormData) {
       'GEOGRAPHY_2': 'Coğrafya-2',
       'PHILOSOPHY_GRP': 'Felsefe Grubu'
   }
+
+  // 1. Calculate total_net BEFORE creating exam
+  let totalNet = 0
+  const validScores: Array<{ subjectKey: string; correct: number; incorrect: number }> = []
   
-  for (const [subjectKey, score] of Object.entries(scores) as any) {
+  for (const [subjectKey, score] of Object.entries(scores)) {
       if (!score.correct && !score.incorrect) continue;
-      
+      const correct = score.correct || 0
+      const incorrect = score.incorrect || 0
+      totalNet += (correct - (incorrect * 0.25))
+      validScores.push({ subjectKey, correct, incorrect })
+  }
+
+  // 2. Create Exam with total_net included
+  const { data: exam, error: examError } = await supabase
+    .from('exams')
+    .insert({ 
+      user_id: user.id, 
+      type: examType, 
+      date: new Date().toISOString(),
+      total_net: totalNet  // Include total_net on insert!
+    })
+    .select()
+    .single()
+
+  if (examError) return { error: examError.message }
+
+  // 3. Process Results - get/create subjects and prepare inserts
+  const resultsToInsert = []
+  
+  for (const { subjectKey, correct, incorrect } of validScores) {
       const dbName = nameMap[subjectKey] || subjectKey
       
       // Get or Create Subject
-      let { data: subject, error: fetchError } = await supabase.from('subjects').select('id').eq('name', dbName).eq('type', examType).single()
+      let { data: subject, error: fetchError } = await supabase
+        .from('subjects')
+        .select('id')
+        .eq('name', dbName)
+        .eq('type', examType)
+        .single()
       
       if (fetchError && fetchError.code !== 'PGRST116') { // PGRST116 is "not found"
           return { error: `Error fetching subject ${dbName}: ${fetchError.message}` }
       }
 
       if (!subject) {
-          const { data: newSubject, error: createError } = await supabase.from('subjects').insert({ name: dbName, type: examType }).select().single()
+          const { data: newSubject, error: createError } = await supabase
+            .from('subjects')
+            .insert({ name: dbName, type: examType })
+            .select()
+            .single()
           
           if (createError) {
               return { error: `Error creating subject ${dbName}: ${createError.message}` }
@@ -255,30 +279,155 @@ export async function saveExam(previousState: any, formData: FormData) {
          resultsToInsert.push({
              exam_id: exam.id,
              subject_id: subject.id,
-             correct_count: score.correct || 0,
-             incorrect_count: score.incorrect || 0
+             correct_count: correct,
+             incorrect_count: incorrect
          })
       }
   }
 
+  // 4. Insert exam results
   if (resultsToInsert.length > 0) {
       const { error: resultsError } = await supabase.from('exam_results').insert(resultsToInsert)
       if (resultsError) return { error: resultsError.message }
   }
 
-  // Calculate Total Net and Update Exam
-  let totalNet = 0
-  resultsToInsert.forEach(r => {
-      totalNet += (r.correct_count - (r.incorrect_count * 0.25))
-  })
-  
-  const { error: updateError } = await supabase.from('exams').update({ total_net: totalNet }).eq('id', exam.id)
-  
-  if (updateError) {
-      return { error: `Error updating exam total: ${updateError.message}` }
-  }
-
   revalidatePath('/exams')
   revalidatePath('/')
   redirect('/exams')
+}
+
+export async function deleteExam(examId: string) {
+  const cookieStore = await cookies()
+  const supabase = createServerClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    { cookies: { getAll: () => cookieStore.getAll(), setAll: () => {} } }
+  )
+
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) return { error: 'Not authenticated' }
+
+  // Delete exam results first (foreign key constraint)
+  const { error: resultsError } = await supabase
+    .from('exam_results')
+    .delete()
+    .eq('exam_id', examId)
+  
+  if (resultsError) return { error: resultsError.message }
+
+  // Then delete the exam
+  const { error: examError } = await supabase
+    .from('exams')
+    .delete()
+    .eq('id', examId)
+    .eq('user_id', user.id) // Ensure user owns this exam
+  
+  if (examError) return { error: examError.message }
+
+  revalidatePath('/exams')
+  revalidatePath('/')
+  return { success: true }
+}
+
+export async function updateExamResults(
+  examId: string, 
+  examType: string,
+  scores: Record<string, { correct: number; incorrect: number }>
+) {
+  const cookieStore = await cookies()
+  const supabase = createServerClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    { cookies: { getAll: () => cookieStore.getAll(), setAll: () => {} } }
+  )
+
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) return { error: 'Not authenticated' }
+
+  const nameMap: Record<string, string> = {
+      'TURKISH': 'Türkçe',
+      'MATH': 'Matematik',
+      'PHYSICS': 'Fizik',
+      'CHEMISTRY': 'Kimya',
+      'BIOLOGY': 'Biyoloji',
+      'HISTORY': 'Tarih',
+      'GEOGRAPHY': 'Coğrafya',
+      'PHILOSOPHY': 'Felsefe',
+      'RELIGION': 'Din Kültürü',
+      'LITERATURE': 'Edebiyat',
+      'HISTORY_1': 'Tarih-1',
+      'HISTORY_2': 'Tarih-2',
+      'GEOGRAPHY_1': 'Coğrafya-1',
+      'GEOGRAPHY_2': 'Coğrafya-2',
+      'PHILOSOPHY_GRP': 'Felsefe Grubu'
+  }
+
+  // Delete existing results
+  const { error: deleteError } = await supabase
+    .from('exam_results')
+    .delete()
+    .eq('exam_id', examId)
+
+  if (deleteError) return { error: deleteError.message }
+
+  // Calculate new total and prepare results
+  let totalNet = 0
+  const resultsToInsert = []
+
+  for (const [subjectKey, score] of Object.entries(scores)) {
+    if (!score.correct && !score.incorrect) continue
+    const correct = score.correct || 0
+    const incorrect = score.incorrect || 0
+    totalNet += (correct - (incorrect * 0.25))
+
+    const dbName = nameMap[subjectKey] || subjectKey
+    
+    let { data: subject } = await supabase
+      .from('subjects')
+      .select('id')
+      .eq('name', dbName)
+      .eq('type', examType)
+      .single()
+
+    if (!subject) {
+      const { data: newSubject, error: createError } = await supabase
+        .from('subjects')
+        .insert({ name: dbName, type: examType })
+        .select()
+        .single()
+      if (createError) return { error: createError.message }
+      subject = newSubject
+    }
+
+    if (subject) {
+      resultsToInsert.push({
+        exam_id: examId,
+        subject_id: subject.id,
+        correct_count: correct,
+        incorrect_count: incorrect
+      })
+    }
+  }
+
+  // Insert new results
+  if (resultsToInsert.length > 0) {
+    const { error: insertError } = await supabase
+      .from('exam_results')
+      .insert(resultsToInsert)
+    if (insertError) return { error: insertError.message }
+  }
+
+  // Update exam total_net
+  const { error: updateError } = await supabase
+    .from('exams')
+    .update({ total_net: totalNet })
+    .eq('id', examId)
+    .eq('user_id', user.id)
+
+  if (updateError) return { error: updateError.message }
+
+  revalidatePath('/exams')
+  revalidatePath(`/exams/${examId}`)
+  revalidatePath('/')
+  return { success: true }
 }
